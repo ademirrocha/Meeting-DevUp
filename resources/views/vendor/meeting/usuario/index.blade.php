@@ -30,14 +30,25 @@
                 <p>Data: {{$detalhe_reuniao->data_inicio}}</p>
                 <p>Local: {{App\Models\Localizacao::find($detalhe_reuniao->localizacao_id)->nome}}</p>
                 <p>Facilitador: {{App\User::find($reuniao->user_id)->nome}}</p>
+                <p>Voce Foi: {{$reuniao->tipo}}</p>
               </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
+              
               <a href="#" onclick="redirectReuniao('{{$reuniao->reuniao_id}}', `{{route('reuniao')}}`)" class="small-box-footer">Mais detalhes <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           
           @endforeach
+
+          @if($reunioes->count() == 0)
+            <div class="small-box bg-aqua ">
+             
+                <div class="inner">
+                <p>Não há reuniões marcadas pra você</p>
+              </div>
+                
+              
+              
+            </div>
+          @endif
        
       </section>
 
