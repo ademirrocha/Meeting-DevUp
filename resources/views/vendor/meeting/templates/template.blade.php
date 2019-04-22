@@ -7,6 +7,8 @@
 
     <title>Meeting</title>
 
+    <link rel="stylesheet" type="text/css" href="{{asset('vendor/meeting/styles/adminlte.css')}}" />
+
     <link rel="stylesheet" type="text/css" href="{{asset('vendor/meeting/styles/custom.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{asset('vendor/meeting/styles/layout.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{asset('vendor/meeting/styles/components.css')}}" />
@@ -20,7 +22,10 @@
     <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
     
 
+   
 
+
+      @yield('css')
     
     <!-- <link rel="stylesheet" type="text/css" href="../resources/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="../resources/css/algaworks.min.css" /> -->
@@ -29,7 +34,7 @@
     
 </head>
 
-<body>
+<body onload="c();">
     @auth
     <?php 
         $organizacaoUser = App\Models\Organizacao::find(auth()->user()->organizacao_id); 
@@ -111,6 +116,9 @@
         @yield('content')
 
 
+
+
+
     </section>
 
     <footer class="aw-layout-footer">
@@ -123,6 +131,7 @@
 
     <script  src="{{asset('vendor/meeting/javascripts/jquery.min.js')}}"></script>
     <script  src="{{asset('vendor/meeting/javascripts/app.js')}}"></script>
+    <script  src="{{asset('vendor/meeting/javascripts/scripts-meeting.js')}}"></script>
     
     <script  src="{{asset('vendor/meeting/javascripts/bootstrap.mim.js')}}"></script>
 

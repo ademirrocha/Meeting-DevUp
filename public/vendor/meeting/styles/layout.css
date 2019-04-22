@@ -1,6 +1,17 @@
 .center{
 	text-align: center;
 }
+.left{
+	text-align: left;
+}
+
+.right: {
+	text-align: right;
+}
+
+.hidden{
+	display: none;
+}
 
 .organizacao{
 	float: unset;

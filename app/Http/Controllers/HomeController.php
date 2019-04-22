@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Models\Organizacao;
 
+use App\Models\UsersReuniao;
+
 class HomeController extends Controller
 {
     /**
@@ -30,13 +32,19 @@ class HomeController extends Controller
         $organizacaoUser = Organizacao::find(auth()->user()->organizacao_id);
 
 
+
+
         if($organizacaoUser->fantasia == 'Nenhuma'){
             return redirect()->route('organizacao/solicitar-participacao');
         }else if( auth()->user()->organizacao_confirmed == 0 ){
             return redirect()->route('aguardando-solicitacao');
         }
+
+        $reunioes = UsersReuniao::where('user_id', auth()->user()->id)->get();
+
         
         
-        return view('vendor.meeting.usuario.index', compact("organizacaoUser"));
+        
+        return view('vendor.meeting.usuario.index', compact("organizacaoUser", 'reunioes'));
     }
 }

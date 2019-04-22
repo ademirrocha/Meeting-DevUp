@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Reunioes;
 use App\Models\Localizacao;
+use App\Models\UsersReuniao;
 
 class ReunioesController extends Controller
 {
@@ -66,6 +67,7 @@ class ReunioesController extends Controller
 
     	$create = Reunioes::create([
             'organizacao_id' => auth()->user()->organizacao_id,
+            'user_id' => auth()->user()->id,
             'pauta' => $request->pauta,
             'localizacao_id' => $request->localizacao,
             'data_inicio' => $dataIni,
@@ -74,10 +76,92 @@ class ReunioesController extends Controller
 
 
     	if($create){
+
+            $order = Reunioes::find(Reunioes::max('id'))->id;
+
+            $create = UsersReuniao::create([
+                'reuniao_id' => $order,
+                'user_id' => auth()->user()->id,
+                'tipo' => 'Convocado',
+                
+                ]);
+
+
             return redirect()->back()->with('sucesso', 'Reunião agendada com sucesso!');
         }else{
             return redirect()->back()->with('error', 'Não foi possível agendar a reunião!');
         }
+    }
+
+
+
+    public function showReuniao(Request $request){
+
+        $reuniao = Reunioes::find($request->reuniao);
+
+
+        if($reuniao != null){
+            if($reuniao->organizacao_id != auth()->user()->organizacao_id){
+                return redirect()->back();
+            }
+
+            $pessoas = UsersReuniao::where('reuniao_id', $reuniao->id)->get();
+
+           return view('vendor.meeting.reunioes.reuniao', compact('reuniao', 'pessoas'));
+       }else{
+            return redirect()->back();
+       }
+
+        
+
+        
+
+    }
+
+
+
+
+    public function adicionarPessoasNaReuniao(Request $request){
+
+        $reuniao = Reunioes::find($request->reuniao);
+
+
+
+
+        if($reuniao != null){
+            if($reuniao->organizacao_id != auth()->user()->organizacao_id){
+                return redirect()->back();
+            }
+
+
+            //return dd($reuniao->id);
+
+            foreach ($request->pessoa as $key => $p) {
+
+        
+
+            $create = UsersReuniao::create([
+                'reuniao_id' => $reuniao->id,
+                'user_id' => $p,
+                'tipo' => $request['tipo'.$p],
+                
+                ]);
+
+
+            } 
+            
+         
+
+           return redirect()->route('reuniao');
+
+       }else{
+            return redirect()->back();
+       }
+
+        /*
+        
+
+        */ 
     }
 
 

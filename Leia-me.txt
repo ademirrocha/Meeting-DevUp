@@ -76,7 +76,10 @@ e acessar pelo navegador normalmente
 ##################################################################################
 
 
+Para acessar o usuario admin do sistema com os dados padrao
 
+email: admin@meeting.com
+senha:12345678
 
 
 

@@ -36,6 +36,11 @@
                                 <td >{{App\User::find($reuniao->user_id)->nome}}</td>
                                 <td >nenhum</td>
                                 <td style="width:12px">
+
+                                   
+
+
+                                    @if($reuniao->user_id == auth()->user()->id)
                                     <div class="btn-group">
                                         <button class="btn  btn-default">
                                         <i class="fas fa-pencil-alt"></i>
@@ -45,6 +50,9 @@
                                             <i class="fa  fa-trash"></i>
                                         </button>
                                     </div>
+                                    
+                                    @endif
+                                    <a href="#" class="btn  btn-primary" onclick="redirectReuniao('{{$reuniao->id}}', `{{route('reuniao')}}`)">Detalhes</a>
         					    </td>
                             </tr>
                         @endforeach
