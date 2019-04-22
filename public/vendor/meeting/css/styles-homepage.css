@@ -1,0 +1,85 @@
+html, body{
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    box-sizing: border-box;
+    border-style: none;    
+    font-family: 'Nunito Sans', sans-serif;
+    color:#c3c1c5;
+}
+
+.container{
+    width: 100%;
+    height: 100%;
+}
+
+.ilustracao{
+    float: left;
+    width: 50%;
+    height: 100%;
+    background: #c3c1c5;
+    position: relative
+}
+
+.ilustracao img{
+    width: 100%; 
+    opacity: 0.3;
+    box-shadow: 10px 10px 10px 10px #696969; 
+}
+
+
+.box-text{
+    text-align: center;
+    float: left;
+    width: 50%;
+    height: 100%;
+    position: relative; 
+    background: #c3c1c5;
+}
+
+.conteudo-text{
+    margin-top: 40px;
+    position: relative;
+    
+}
+
+.conteudo-text a{
+    text-align: center;
+    margin: 0 10px;
+    font-size: 15px;
+    border: solid 1px #6931dc;
+    border-radius: 5px;
+    color: #6931dc;
+    text-decoration: none;
+    padding: 6px 20px;
+}
+
+.conteudo-text h1{
+    font-family: 'Lobster', cursive;
+    color: #f51d46;
+    /*color: #337ab7;*/
+    font-size: 100px;
+    left: 50%;
+    transform: translate(-50%);
+    position: absolute;
+    padding-top: 110px;
+}
+.conteudo-text p{
+    font-family: sans-serif;
+    color: #2a0577;
+    font-size: 18px;
+    left: 50%;
+    transform: translate(-50%);
+    position: absolute;
+    padding-top: 340px;
+    text-align: center;
+}
+@media (max-width: 989px){
+    
+.ilustracao {
+    display: none;
+}
+.box-text{
+    width: 100%;
+}
+}

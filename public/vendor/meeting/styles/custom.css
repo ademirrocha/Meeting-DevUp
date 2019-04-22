@@ -1,0 +1,40 @@
+/* BASE */
+body {
+	margin: 0;
+	font-size: 13px !important;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.table-pesq-produto-col-acoes {
+	min-width: 105px;
+	text-align: center;
+  }
+/* .aw-layout-simple-page{background-color:#f6f6f6}
+.aw-layout-simple-page__container{display:block;max-width:420px;margin:auto;padding:10% 10px 0}
+.aw-simple-panel{color:#777;text-align:center}.aw-simple-panel__message{padding:20px 0}.aw-simple-panel__message.is-error{color:#e70500}.aw-simple-panel__box{padding:20px 20px 5px;border:1px solid #ccc;border-radius:2px;background-color:#fff}.aw-simple-panel__footer{padding:10px 0}
+.aw-checkbox-no-margin{margin-top:0!important;margin-bottom:0!important} */
+
+/* TABVIEW */
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+	color: #555;
+}
+
+@media (max-width: 640px) {
+	.ui-tabs.ui-tabs-top > .ui-tabs-nav li {
+		width: 100%;
+	}
+}
+
+/* PANELGRID */
+.ui-panelgrid.panelgrid-noborder .ui-grid-responsive {
+	border: none;
+}
+
+@media (max-width: 640px) {
+	.ui-panelgrid.panelgrid-noborder .ui-grid-responsive .ui-grid-row {
+		border: none;
+	}
+}
+/*.ui-icon-triangle-1-s {
+    background-position: -69px -15px !important;
+}*/

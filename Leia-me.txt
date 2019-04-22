@@ -1,0 +1,82 @@
+Para uso 
+
+
+
+##################################################################################
+
+Configurações de acesso ao banco de dados
+
+-----------------------------------------------------------------------------------
+
+abra o arquivo .env e colocar as configuracoes do seu mysql como no exemplo abaixo
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=meeting
+DB_USERNAME=root
+DB_PASSWORD=
+
+
+
+
+##################################################################################
+
+com composer instalado
+
+-----------------------------------------------------------------------------------
+
+criar o banco de dados 'meeting' manualmente
+
+com estas configuracões 
+
+'charset' = 'utf8mb4',
+'collation' = 'utf8mb4_unicode_ci',
+
+
+-----------------------------------------------------------------------------------
+
+
+dentro da pasta raiz executar os comandos
+
+$ php artisan migrate   /*pra criar as tabelas do banco de dados
+
+$ php artisan db:seed   /*pra inserir os dados das tabelas
+
+php artisan serve  /* para iniciar o servidor 
+
+-----------------------------------------------------------------------------------
+
+Agora basta acessar o http://localhost:8000
+
+
+
+
+
+
+##################################################################################
+
+
+
+sem o composer instalado
+
+-----------------------------------------------------------------------------------
+
+
+colocar a pasta do projeto pasta de host ex.: www ou htdocs
+
+-----------------------------------------------------------------------------------
+
+criar o banco de dados com o arquivo sql 'meeting (1).sql' salvo na pasta raiz do projeto
+
+
+
+e acessar pelo navegador normalmente 
+
+##################################################################################
+
+
+
+
+
+
