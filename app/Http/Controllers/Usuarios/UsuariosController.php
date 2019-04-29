@@ -13,6 +13,8 @@ use App\Models\Localizacao;
 use App\Models\Cargo;
 use App\User;
 
+use Illuminate\Support\Facades\DB;
+
 
 class UsuariosController extends Controller
 {
@@ -31,16 +33,12 @@ class UsuariosController extends Controller
 
     public function acount(){
 
-        if( User::registeredOk()){
-            return view("vendor.meeting.usuario.acount");
-        }
 
-        return redirect()->route('home');
+        return view("vendor.meeting.usuario.cadastro");
+        
     }
 
-    public function acountEdit(){
-    	return view("vendor.meeting.usuario.cadastro");
-    }
+    
 
 
     public function postAcountEdit( Request $request ){
@@ -62,11 +60,6 @@ class UsuariosController extends Controller
 
 		     $user = auth()->user();
 
-
-        
-    
-
-		    
 
             if( $dados['password'] != null){
 
@@ -138,22 +131,21 @@ class UsuariosController extends Controller
 
     
 
-    public function showUsuarios(Request $request){
+    public function showUsuarios(Request $request, User $user){
+
+
 
        if( $request->route()->getPrefix() == null && auth()->user()->cargo_id == 2){
             return $this->setPrefixAdmin($request);
        }else if($request->route()->getPrefix() != null && auth()->user()->cargo_id != 2){
             return redirect()->route('usuarios');
        }
-        
-        if( User::registeredOk()){
-            return view("vendor.meeting.usuario.listar");
 
+       $permissoes = auth()->user()->rolesUser();
 
+        $usuarios = User::where('organizacao_id', auth()->user()->organizacao_id)->get();
 
-        }else{
-            return redirect()->back();
-        }
+        return view("vendor.meeting.usuario.listar", compact('usuarios', 'permissoes'));
     }
 
 
@@ -166,10 +158,17 @@ class UsuariosController extends Controller
         if($usuario->organizacao_id == auth()->user()->organizacao_id){
             $usuario->organizacao_confirmed = 1;
             
+            
             $update = $usuario->save();
+
         }
 
         if($update){
+
+            DB::table('role_user')->insert([
+                 ['user_id' => $usuario->id, 'role_id' => 3],
+            ]);
+           
             return redirect()->back()->with('sucesso', 'Usuário atualizado com sucesso!');
         }else{
             return redirect()->back()->with('error', 'Não foi possível atualizar o usuário!');
@@ -203,7 +202,7 @@ class UsuariosController extends Controller
 
         
     
-        return redirect()->route('localizacoes');
+        return redirect()->route('locais');
 
     }
 

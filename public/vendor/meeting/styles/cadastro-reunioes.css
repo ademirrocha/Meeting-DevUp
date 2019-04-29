@@ -1,0 +1,25 @@
+.area-box{
+	border: 1px solid;
+	margin: 10px;
+	padding: 10px;
+	flex: 0 0 47%;
+	left: 5px;
+	max-height: 300px;
+	overflow: auto;
+}
+
+.input-error{
+	border-color: red;
+}
+
+.btn-mais, .btn-menos{
+	float: right;
+}
+
+#error-pauta{
+	color: red;
+}
+
+.input-pauta{
+	margin-top: 10px;
+}

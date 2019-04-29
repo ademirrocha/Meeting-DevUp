@@ -9,12 +9,8 @@
 
         <div class="container-fluid col-sm-12 form-group">
             <div class="table-responsive">
-                <?php 
-                    if(Auth::user()->organizacao_id == 2)
-                        $organizacoes = App\Models\Organizacao::all();
-                    else 
-                        $organizacoes = App\Models\Organizacao::find(Auth::user()->organizacao_id);
-                ?>
+
+               
                 <table id="tabela-produtos" class="table  table-striped  table-bordered  table-hover  table-condensed  js-sticky-table">
                     <thead class="aw-table-header-solid">
                         <tr>
@@ -26,12 +22,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if(Auth::user()->organizacao_id == 2)
+                            
                             <script src="{{ asset('vendor/meeting/javascripts/script-admin-meeting.js') }}"></script>
+
+                           
+
                             @foreach( $organizacoes as $organizacao )
                                 @if($organizacao->id > 1)
 
-                                    @if( ! $organizacao->meeting_confirmed)
+                                    @if( ! $organizacao->meeting_confirmed )
                                         <tr style="background: #FF7F24;">
                                     @else
                                         <tr >
@@ -45,28 +44,37 @@
                                                 Registrada
                                             @else
                                                 Solicitação Pendente
-                                                @if(Auth::user()->organizacao_id == 2)
-
-                                                <?php $d = App\User::all(); ?>
-                                                    @foreach($d as $i)
-                                                        @if($i->organizacao_id == $organizacao->id)
-                                                            <?php $u = $i->id; ?>
-                                                        @endif
-                                                    @endforeach
-
-                                                    {{$u}}
-
-                                                <a class="btn btn-primary" onclick="autorizarOrganizacao('{{$organizacao->id}}', '{{$u}}', '{{$organizacao->fantasia}}', `{{route('admin/autorizar-organizacao')}}`)" href="#">Autorizar</a>
-                                                @endif
-
                                             @endif
+
+                                            
                                         </td>
+
                                         <td style="width:12px">
                                             <div class="btn-group">
-                                                <button class="btn  btn-default">
-                                                <i class="fas fa-pencil-alt"></i>
-                                                </button>
+
+
+
+                                            @foreach($permissoes as $permissao)
+
+                                                    @if( ( $permissao->nome == 'super_admin' || $permissao->permissoes->contains('nome', 'confirmar_organizacao') ) && ! $organizacao->meeting_confirmed)
                                                 
+                                                    <a class="btn btn-default" onclick="autorizarOrganizacao('{{$organizacao->id}}', '', '{{$organizacao->fantasia}}', `{{route('admin/autorizar-organizacao')}}`)" href="#">
+                                                        <i class="fas fa-check-square"></i>
+                                                    </a>
+                                                    @endif
+
+                                                     @if($permissao->permissoes->contains('nome', 'update_organizacao') || $permissao->nome == 'super_admin')
+                                                
+                                                    <a class="btn btn-default"  href="#">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </a>
+                                                    @endif
+
+                                                @endforeach
+
+
+
+                                            
                                                 <button class="btn  btn-default btn-xs">
                                                     <i class="fa  fa-trash"></i>
                                                 </button>
@@ -77,32 +85,7 @@
                                    
                                 @endif
                             @endforeach
-                        @else
-                             <tr >
-                                <td >{{$organizacoes->razao_social}}</td>
-                                <td >{{$organizacoes->fantasia}}</td>
-                                <td >{{$organizacoes->cnpj}}</td>
-                                <td >
-                                    @if( $organizacoes->meeting_confirmed )
-                                        Registrada
-                                    @else
-                                        Solicitação Pendente
-                                    @endif
-                                </td>
-
-                                <td style="width:12px">
-                                    <div class="btn-group">
-                                        <button class="btn  btn-default">
-                                        <i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                        
-                                        <button class="btn  btn-default btn-xs">
-                                            <i class="fa  fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endif
+                        
                     </tbody>
                 </table>
             </div>

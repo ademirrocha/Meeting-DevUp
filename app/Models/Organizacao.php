@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Organizacao;
+use App\USer;
+use App\Models\Reunioes;
 
 class Organizacao extends Model
 {
@@ -16,8 +18,24 @@ class Organizacao extends Model
 
     protected $primaryKey = 'id';
 
+    //relacionamento entre organizacao e users
+    public function users(){
+        return $this->hasMany(User::class);
+    }
 
-    
+
+    //relacionamento entre organização e Localizaçoes
+    public function localizacoes(){
+        return $this->hasMany(Localizacao::class, 'organizacao_id');
+    }
+
+
+    //relacionamento entre organização e reunioes
+    public function reunioes(){
+        return $this->hasMany(Reunioes::class);
+    }
+
+
     
 
     

@@ -17,6 +17,7 @@ class UsersTableSeeder extends Seeder
         if($user->count() == 0) {
 
             User::create([
+                'id' => 1,
             	'organizacao_id' => 2,
                 'organizacao_confirmed' => 1,
             	'nome' => 'Admin do Meeting',
@@ -28,6 +29,7 @@ class UsersTableSeeder extends Seeder
 
 
             User::create([
+                'id' => 2,
                 'organizacao_id' => 3,
                 'organizacao_confirmed' => 1,
                 'nome' => 'Ademir Rocha',

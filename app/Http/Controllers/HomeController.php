@@ -27,12 +27,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //$dadosUser = User::hasOne();
-
+        
         $organizacaoUser = Organizacao::find(auth()->user()->organizacao_id);
-
-
-
 
         if($organizacaoUser->fantasia == 'Nenhuma'){
             return redirect()->route('organizacao/solicitar-participacao');
@@ -42,9 +38,6 @@ class HomeController extends Controller
 
         $reunioes = UsersReuniao::where('user_id', auth()->user()->id)->get();
 
-        
-        
-        
         return view('vendor.meeting.usuario.index', compact("organizacaoUser", 'reunioes'));
     }
 }

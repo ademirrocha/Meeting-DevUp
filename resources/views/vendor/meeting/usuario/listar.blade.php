@@ -8,9 +8,7 @@
 
 
 
-        <div class="col-sm-12 form-group ">
-            <a class="btn  btn-primary " >Novo Usuário</a>
-        </div>
+       
 
         <div class="container-fluid col-sm-12 form-group">
 
@@ -26,9 +24,7 @@
             @endif
 
             <div class="table-responsive">
-                <?php 
-                    $usuarios = App\User::where('organizacao_id', Auth::user()->organizacao_id)->get();
-                ?>
+                
 
                 
                 <table id="tabela-produtos" class="table  table-striped  table-bordered  table-hover  table-condensed  js-sticky-table">
@@ -67,24 +63,39 @@
                                         Membro da Organização
                                     @else
                                         Solicitação Pendente
-                                        @if ( auth()->user()->cargo_id == 2)
-                                            <script src="{{ asset('vendor/meeting/javascripts/script-admins.js') }}"></script>
-
-                                            <a class="btn btn-primary" onclick="autorizarUsuario('{{$usuario->id}}', '{{$usuario->nome}}', `{{route('autorizar-usuario')}}`)" href="#">Autorizar</a>
-                                        @endif
-                                        
 
                                     @endif
+
+                                    
                                 </td>
                                 <td style="width:12px">
-                                    <div class="btn-group">
-                                        <button class="btn  btn-default">
-                                        <i class="fas fa-pencil-alt"></i>
-                                        </button>
+                                     <div class="btn-group">
+
+                                        @foreach($permissoes as $permissao)
+
+                                            @if($permissao->permissoes->contains('nome', 'confirmar_user') && ! $usuario->organizacao_confirmed)
                                         
-                                        <button class="btn  btn-default btn-xs">
-                                            <i class="fa  fa-trash"></i>
-                                        </button>
+                                            <script src="{{ asset('vendor/meeting/javascripts/script-admins.js') }}"></script>
+                                            
+                                            <a class="btn  btn-default" onclick="autorizarUsuario('{{$usuario->id}}', '{{$usuario->nome}}', `{{route('autorizar-usuario')}}`)" href="#" alt="Autorizar Usuario" title="Autorizar Usuario">
+                                                <i class="fas fa-check-square"></i>
+                                            </a>
+                                            @endif
+
+                                            @if($permissao->permissoes->contains('nome', 'update_user') && auth()->user()->id == $usuario->id)
+                                                <a class="btn  btn-default" href="{{route('acount')}}" alt="Visualizar ou editar seus  dados" title="Visualizar ou editar seus  dados">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </a>
+                                            @endif
+
+
+
+
+
+                                        @endforeach
+
+                                   
+                                       
                                     </div>
         					    </td>
                             </tr>

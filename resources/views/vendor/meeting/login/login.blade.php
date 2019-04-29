@@ -58,7 +58,7 @@
 						
 					</div>
 					<div class="form-group">
-						<button type="submit" class="btn  btn-primary  btn-lg  aw-btn-full-width">Entrar</button>
+						<input class="btn  btn-primary  btn-lg  aw-btn-full-width" type="submit" value="Entrar">
 					</div>
 
 					<div class="form-group clearfix">

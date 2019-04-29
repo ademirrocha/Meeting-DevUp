@@ -8,8 +8,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use App\Models\Permissoes\Permission;
+use App\Models\Permissoes\Role;
 use App\Models\Organizacao;
 use App\Models\Cargo;
+
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -17,19 +21,64 @@ class User extends Authenticatable
 
     
 
-    
-
-    
-
-
-    protected function registeredOk(){
-        if(auth()->user()->organizacao_confirmed == 1 ){
-            return true;
-        }else{
-            return false;
-        }
+    //relacionamento entre users e organizacao
+    public function organizacao(){
+        return $this->belongsTo(Organizacao::class, 'organizacao_id');
     }
 
+    //relacionamento entre users e cargo
+    public function cargo(){
+        return $this->belongsTo(Cargo::class, 'cargo_id');
+    }
+    
+
+    public function rolesUser(){
+
+        $rolesUser = DB::table('role_user')->where('user_id', auth()->user()->id)->get();
+        
+        $permissions = array();
+        foreach ($rolesUser as $value) {
+            
+            $roles = Role::with('permissoes')->where('id', $value->role_id)->get();
+            foreach ($roles as $role) {
+                array_push($permissions, $role);
+            }
+   
+        }
+
+        return $permissions;
+       
+    }
+
+
+    public function roles(){
+
+       
+
+        return $this->belongsToMany(Role::class);
+
+    }
+
+    public function hasPermission(Permission $permission){
+
+         return $this->hasAnyRoles($permission->roles);
+    }
+
+
+    public function hasAnyRoles($roles){
+        if ( is_array($roles) || is_object($roles)  ){
+            foreach ($roles as $role) {
+                
+                return $this->hasAnyRoles($role->nome);
+            }
+        }
+
+
+        return $this->roles->contains('nome', $roles);
+        
+    }
+
+    /*
     protected function isAdmin(){
         
         if( auth()->user()->cargo_id == 2 ){
@@ -39,6 +88,8 @@ class User extends Authenticatable
         }
 
     }
+
+    */
 
     protected function isAdminMeeting(){
         

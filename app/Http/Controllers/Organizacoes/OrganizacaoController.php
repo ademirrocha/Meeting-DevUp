@@ -8,6 +8,10 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Organizacao;
 
+use Gate;
+
+use Illuminate\Support\Facades\DB;
+
 class OrganizacaoController extends Controller
 {
     private $organizacao;
@@ -22,21 +26,34 @@ class OrganizacaoController extends Controller
 	}
 
 
-    public function showAguardandoOrganizacao(){
-        if(User::registeredOk()){
+    public function showAguardandoOrganizacao(User $user){
+
+       
+       $permissoes = auth()->user()->rolesUser();
+
+       
+
+        if($permissoes[0]->nome == 'unauthorized' ){
+            return view("vendor.meeting.usuario.aguardando-solicitacao");
+            
+        }else{
             return redirect()->route('home');
         }
-        return view("vendor.meeting.usuario.aguardando-solicitacao");
+            
+        
     }
 
-	public function getSolicitaOrganizacao(){
+	public function getSolicitaOrganizacao(User $user){
 
-        if( User::registeredOk()  ){
+       
+        $permissoes = auth()->user()->rolesUser();
+
+        if($permissoes[0]->nome == 'unauthorized' ){
+            return view("vendor.meeting.usuario.solicitacao");
+            
+        }else{
             return redirect()->route('home');
         }
-
-        return view("vendor.meeting.usuario.solicitacao");
-       
 
     }
 
@@ -88,11 +105,15 @@ class OrganizacaoController extends Controller
 
             $user = auth()->user();
 
+
+
             $user->organizacao_id = $order;
             $user->organizacao_confirmed = 0;
             $user->cargo_id = 2;
 
-            $user->save();
+            $userSave = $user->save();
+            
+
    
             return redirect()->route('home');
         }else{
@@ -105,11 +126,37 @@ class OrganizacaoController extends Controller
 
 
     public function showOrganizacoes(){
-        if( User::isAdmin() ){
-            return view('vendor.meeting.organizacao.listar');
-        }else{
-            return redirect()->back();
+
+        $permissoes = auth()->user()->rolesUser();
+
+        
+
+        if($permissoes[0]->nome == 'unauthorized' ){
+            return redirect()->route('home');
         }
+
+        foreach ($permissoes as $permissao) {
+            if($permissao->permissoes->contains('nome', 'view_organizacao')){
+                $organizacoes = Organizacao::where('id', auth()->user()->organizacao_id)->get();
+
+                return view('vendor.meeting.organizacao.listar', compact('organizacoes', 'permissoes'));
+
+
+            }
+            
+        }
+        
+        
+       
+        if($permissoes[0]->nome == 'super_admin' ){
+            $organizacoes = Organizacao::all();
+            return view('vendor.meeting.organizacao.listar', compact('organizacoes', 'permissoes'));
+
+        }else{
+            redirect()->route('home');
+        }
+        
+        
     }
 
     public function AutorizarOrganizacao(Request $request){
@@ -134,7 +181,13 @@ class OrganizacaoController extends Controller
 
             $user->organizacao_confirmed = 1;
             
-           $user->save();
+           $salve = $user->save();
+
+           if($salve){
+                DB::table('role_user')->insert([
+                    ['user_id' => $user->id, 'role_id' => 2],
+                ]);
+           }
 
         }
 

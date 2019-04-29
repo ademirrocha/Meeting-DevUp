@@ -11,9 +11,11 @@ class Cargo extends Model
     
     protected $fillable = ['cargo'];
 
-    public function usuario(){
-	    return $this->belongsTo(User::class);
-	}
+    
+    //relacionamento entre cardo e users
+	public function users(){
+        return $this->hasMany(User::class, 'cargo_id');
+    }
 
     
 }

@@ -15,46 +15,75 @@
                 <table id="tabela-produtos" class="table  table-striped  table-bordered  table-hover  table-condensed  js-sticky-table">
                     <thead class="aw-table-header-solid">
                         <tr>
-                            <th>Pauta</th>
+                            <th>Título</th>
                             <th>Local</th>
                             <th>Data Inicio</th>
                             <th>Data Término</th>
                             <th>Facilitador</th>
-                            <th>Convidado/Convocado</th>
+                            <th>Tipo de Reunião</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
+
+
                         
                         @foreach($reunioes as $reuniao)
-                            <tr >
-                                <td >{{$reuniao->pauta}}</td>
 
-                                <td >{{App\Models\Localizacao::find($reuniao->localizacao_id)->nome}}</td>
+                        
+                            
+
+                            <tr >
+                                <td >{{$reuniao->title}}</td>
+
+                                <td >{{$reuniao->local->nome}}</td>
                                 <td >{{$reuniao->data_inicio}}</td>
                                 <td >{{$reuniao->data_fim}}</td>
                                 <td >{{App\User::find($reuniao->user_id)->nome}}</td>
-                                <td >nenhum</td>
+                                <td >{{$reuniao->tipo}}</td>
                                 <td style="width:12px">
 
                                    
-
-
-                                    @if($reuniao->user_id == auth()->user()->id)
-                                    <div class="btn-group">
-                                        <button class="btn  btn-default">
-                                        <i class="fas fa-pencil-alt"></i>
-                                        </button>
                                         
-                                        <button class="btn  btn-default btn-xs">
-                                            <i class="fa  fa-trash"></i>
-                                        </button>
+
+                                    
+                                    <div class="btn-group">
+
+                                        
+
+                                         @foreach($permissoes as $permissao)
+
+                                         @if($permissao->permissoes->contains('nome', 'update_reuniao') && $reuniao->user_id == auth()->user()->id)
+                                            <a class="btn  btn-default" alt="Clique para visualizar ou editar essa reunião" title="Clique para visualizar ou editar essa reunião" onclick="redirectReuniao('{{$reuniao->id}}', `{{route('reuniao')}}`)">
+                                                <i class="fas fa-pencil-alt"></i>
+                                                </a>
+
+                                         @elseif($permissao->permissoes->contains('nome', 'view_reuniao'))
+
+                                                <a class="btn  btn-default btn-xs" onclick="redirectReuniao('{{$reuniao->id}}', `{{route('reuniao')}}`)" alt="Clique para ver detalhes dessa reunião" title="Clique para ver detalhes dessa reunião">
+                                                    <i class="fa  fa-info-circle">
+                                                        
+                                                    </i>
+                                                </a>
+                                           
+                                            @endif
+
+                                            @if($permissao->permissoes->contains('nome', 'delete_reuniao'))
+                                            <button class="btn  btn-default btn-xs">
+                                                <i class="fa  fa-trash"></i>
+                                            </button>
+                                            @endif
+
+                                        @endforeach
+
                                     </div>
                                     
-                                    @endif
-                                    <a href="#" class="btn  btn-primary" onclick="redirectReuniao('{{$reuniao->id}}', `{{route('reuniao')}}`)">Detalhes</a>
+                                    
+                                   
+                                    
         					    </td>
                             </tr>
+                            </label>
                         @endforeach
                         @if($reunioes->count() == 0)
                             <tr>

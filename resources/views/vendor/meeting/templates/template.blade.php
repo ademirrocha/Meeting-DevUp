@@ -34,7 +34,7 @@
     
 </head>
 
-<body onload="c();">
+<body onload="">
     @auth
     <?php 
         $organizacaoUser = App\Models\Organizacao::find(auth()->user()->organizacao_id); 
@@ -134,9 +134,9 @@
     <script  src="{{asset('vendor/meeting/javascripts/scripts-meeting.js')}}"></script>
     
     <script  src="{{asset('vendor/meeting/javascripts/bootstrap.mim.js')}}"></script>
+    <script  src="{{asset('vendor/meeting/javascripts/jquery.min.js')}}"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
+   
     
 </body>
 </html>

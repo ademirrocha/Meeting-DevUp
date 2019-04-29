@@ -2,27 +2,13 @@
 
 
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::get('permissions', 'Config\ConfigController@permissoes')->name('permissions');
+
+
+Route::POST('permissions/{id}/editar', 'Config\ConfigController@editarPermissoes');
 
 
 
-
-Route::get('/', function () {
-    return view('welcome');
-})->name('/');
-
-//Route::get('/', 'HomeController@index')->name('/');
-
-Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -31,16 +17,15 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['middleware', ['auth'], 'namespace' => 'Usuarios'], function(){
 	
 	Route::get('/acount', 'UsuariosController@acount')->name('acount');
-	Route::get('acount/edit', 'UsuariosController@acountEdit')->name('acount/edit');
 	Route::post('acount/edit', 'UsuariosController@postAcountEdit')->name('acount/edit');
 
 	Route::get('usuarios', 'UsuariosController@showUsuarios')->name('usuarios');
 
-	Route::get('localizacoes', 'UsuariosController@showLocalizacoes')->name('localizacoes');
+	Route::get('locais', 'UsuariosController@showLocalizacoes')->name('locais');
 
-	Route::get('localizacoes/cadastrar', 'UsuariosController@showCadastroLocalizacao')->name('localizacoes/cadastrar');
+	Route::get('locais/cadastrar', 'UsuariosController@showCadastroLocalizacao')->name('locais/cadastrar');
 
-	Route::POST('localizacoes/cadastro', 'UsuariosController@cadastrarLocalizacao')->name('localizacoes/cadastro');
+	Route::POST('locais/cadastro', 'UsuariosController@cadastrarLocalizacao')->name('locais/cadastro');
 
 
 
@@ -90,6 +75,11 @@ Route::group(['middleware', ['auth'], 'namespace' => 'Runioes' ], function(){
 
 	Route::get('reuniao', 'ReunioesController@showReuniao')->name('reuniao');
 	
+
+	Route::POST('reunioes/editar', 'ReunioesController@editarReuniao')->name('reunioes/editar');
+
+	
+	
 });
 
 
@@ -99,10 +89,15 @@ Route::group(['middleware', ['auth'], 'namespace' => 'Usuarios' , 'prefix' => 'a
 	
 	Route::POST('autorizar-usuario', 'UsuariosController@autorizarUsuario')->name('autorizar-usuario');
 
+
+
 });
 
 
 Route::POST('cadastrar-cargo', 'Controller@cadastrarCargo')->name('cadastrar-cargo');
 
+Auth::routes();
 
-
+Route::get('/', function () {
+    return view('welcome');
+})->name('/');

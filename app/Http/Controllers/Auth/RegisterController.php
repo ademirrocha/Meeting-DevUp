@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
+use Illuminate\Support\Facades\DB;
+
 class RegisterController extends Controller
 {
     /*
@@ -73,12 +75,24 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $create = User::create([
             'nome' => $data['name'],
             'cpf' => $data['cpf'],
             'telefone' => $data['telefone'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        if($create){
+            $oldId = User::find(User::max('id'))->id;
+
+            DB::table('role_user')->insert([
+                ['user_id' => $oldId, 'role_id' => 4],
+            ]);
+        }
+        
+
+        return $create;
+
     }
 }

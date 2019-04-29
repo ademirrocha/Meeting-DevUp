@@ -59,14 +59,14 @@
 					@endif
 
 					@if( 
-						$menu == 'localizacoes' ||
-						$menu == 'localizacoes/cadastrar' 
+						$menu == 'locais' ||
+						$menu == 'local/cadastrar' 
 					)
 						<li class="is-selected">
 					@else
 						<li>
 					@endif
-					<a href="{{route('localizacoes')}}"><i class="fa fa-map-marker"></i><span>Localização</span></a>
+					<a href="{{route('locais')}}"><i class="fa fa-map-marker"></i><span>Locais de Reuniões</span></a>
 				</li>
 				@if( 
 					$menu == 'reunioes' ||
@@ -78,6 +78,18 @@
 				@endif
 					<a href="{{route('reunioes')}}"><i class="fa fa-user-circle"></i><span>Gerenciar Reuniões</span></a>
 				</li>
+
+				@can('super_admin')
+					@if( 
+						$menu == 'permissions'
+					)
+						<li class="is-selected">
+					@else
+						<li>
+					@endif
+						<a href="{{route('permissions')}}"><i class="fa fa-user-circle"></i><span>Permissões de usuários</span></a>
+					</li>
+				@endcan
 			</ul>
 		</nav>
 	</aside>

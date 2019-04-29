@@ -26,11 +26,11 @@
                         @if(Auth::user()->imagem == null)
                             <?php $image = 'perfil.png'; ?>
                         @else
-                            <?php $image = Auth::user()->imagem; ?>
+                            <?php $image = auth()->user()->imagem; ?>
                         @endif
 
                         <label for="imagem" class="btn" id="forImg">
-                                <img id="imgUser" alt="Clique para alterar a imagem" src="{{ asset('storage/users/'.auth()->user()->imagem) }}" class="imagem-usuario-acount ">
+                                <img id="imgUser" alt="Clique para alterar a imagem" title="Clique para alterar a imagem" src="{{ asset('storage/users/'.$image) }}" class="imagem-usuario-acount ">
                             </label>
 
                              <input id="imagem" type="file" style="visibility:hidden;" name="imagem" ><br>

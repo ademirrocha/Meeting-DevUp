@@ -18,7 +18,7 @@ class OrganizacaoTableSeed extends Seeder
 
         	Organizacao::create([
         		'id' => 1,
-            	'razao_social' => 'Nenhuma',
+                'razao_social' => 'Nenhuma',
                 'cnpj' => '0000000',
                 'fantasia' => 'Nenhuma'
                 
@@ -26,6 +26,7 @@ class OrganizacaoTableSeed extends Seeder
 
             Organizacao::create([
             	'id' => 2,
+                'meeting_confirmed' => 1,
             	'razao_social' => 'Meeting Enterprise',
                 'cnpj' => '0000000',
                 'fantasia' => 'Meeting Enterprise'
@@ -37,7 +38,8 @@ class OrganizacaoTableSeed extends Seeder
 
             Organizacao::create([
             	'id' => 3,
-            	'razao_social' => 'Equipe Dev - BSI',
+            	'meeting_confirmed' => 1,
+                'razao_social' => 'Equipe Dev - BSI',
             	'cnpj' => '00000000000000000',
             	'fantasia' => 'Equipe Dev - BSI'
             	

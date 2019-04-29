@@ -23,14 +23,19 @@
        		<?php
        		$detalhe_reuniao = App\Models\Reunioes::find($reuniao->reuniao_id);
        		?>
+
+         
    		      <!-- small box -->
             <div class="small-box bg-aqua ">
               <div class="inner">
                 <h3>{{$detalhe_reuniao->pauta}}</h3>
                 <p>Data: {{$detalhe_reuniao->data_inicio}}</p>
-                <p>Local: {{App\Models\Localizacao::find($detalhe_reuniao->localizacao_id)->nome}}</p>
+                
+                <p>Local: {{$detalhe_reuniao->local->nome}}</p>
+
+
                 <p>Facilitador: {{App\User::find($reuniao->user_id)->nome}}</p>
-                <p>Voce Foi: {{$reuniao->tipo}}</p>
+                <p>Tipo de Reunião: {{$detalhe_reuniao->tipo}}</p>
               </div>
               
               <a href="#" onclick="redirectReuniao('{{$reuniao->reuniao_id}}', `{{route('reuniao')}}`)" class="small-box-footer">Mais detalhes <i class="fa fa-arrow-circle-right"></i></a>

@@ -5,7 +5,8 @@
 <div class="container-fluid">
 
 
-    <h3>Reunião: {{$reuniao->pauta}}</h3>
+    <h3>Reunião: {{$reuniao->title}}</h3>
+    
     <div>
     	Data de Inicio: {{$reuniao->data_inicio}}<br>
     	Data de Término: {{$reuniao->data_fim}}<br>
@@ -13,73 +14,6 @@
     </div>
     <br><br>
     <div class="row">
-
-    	
-    	
-    
-		@if($reuniao->user_id == auth()->user()->id)
-
-			<a class="btn  btn-primary" href="#" onclick="addPessoaReuniao( '{{$reuniao->pauta}}')">Adicionar Pessoas</a>
-
-			<?php
-				$funcionarios = App\User::where('organizacao_id', $reuniao->organizacao_id)->get();
-
-
-			?>
-
-
-
-			<div style="display:none;" id="form_pessoas">
-				<div>Selecione as pessoas abaixo que deseja adicionar a reunião</div>
-				</br>
-				<hr>
-
-				<form action="{{route('reuniao/adicionar-pessoas')}}" method='post'>
-				    <input id="token_page" type="hidden" name="_token" value="{{csrf_token()}}">
-
-				    
-
-					    <input type='hidden' name='reuniao' value='{{$reuniao->id}}'>
-					    @foreach($funcionarios as $funcionario)
-
-					    <?php
-					    	
-					    	$userIn = DB::select('select * from users_reuniao where user_id = ? && reuniao_id = ? ', [$funcionario->id, $reuniao->id]);
-					    ?>
-
-						
-						@if(!$userIn)
-
-					    <div class="col-sm-12 form-group">
-					    	{{$funcionario->nome}} <input type='checkbox' name='pessoa[]' value='{{$funcionario->id}}'>
-
-					    </div>
-					    <div class="col-sm-12 form-group">
-					    	Tipo de Convocação:<br>
-				    	
-					    	<label>Convidado: 
-					    		<input type='radio' name='tipo{{$funcionario->id}}' value='Convidado'>
-					    	</label>
-
-					    	<label>Convocado: 
-					    		<input type='radio' name='tipo{{$funcionario->id}}' value='Convocado'>
-					    	</label>
-					    </div>
-					    <hr>
-
-					   @endif
-
-				    @endforeach
-				     
-				    <button id="btnAddPessoa" type='submit' class="btn btn-primary" >Adicionar Pessoas</button>
-				</form>
-
-			</div>
-
-			
-
-			
-		@endif
 
 
 		 <div class="container-fluid col-sm-12 form-group">
@@ -92,7 +26,7 @@
 	                    </tr>
                         <tr>
                             <th>Nome</th>
-                            <th>Tipo de Convite</th>
+                            <th>Confirmou Presença</th>
                        
                             <th>Ações</th>
                         </tr>
@@ -106,7 +40,7 @@
                        	?>
                             <tr >
                                 <td >{{$user->nome}}</td>
-                                <td >{{$pessoa->tipo}}</td>
+                                <td >Não</td>
 
                                 <td style="width:12px">
 

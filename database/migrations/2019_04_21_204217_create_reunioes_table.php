@@ -18,7 +18,8 @@ class CreateReunioesTable extends Migration
             $table->bigInteger('user_id')->unsigned()->default(1);
             $table->bigInteger('localizacao_id')->unsigned()->default(1);
             $table->bigInteger('organizacao_id')->unsigned()->default(1);
-            $table->string('pauta', 191);
+            $table->enum('tipo', ['Convite', 'Convocação', 'Convite Geral', 'Convocação Geral']);
+            $table->string('title', 191);
             $table->dateTime('data_inicio');
             $table->dateTime('data_fim');
             
@@ -29,6 +30,19 @@ class CreateReunioesTable extends Migration
             $table->foreign('organizacao_id')->references('id')->on('organizacoes')->onDelete('cascade');
             
         });
+
+
+
+        Schema::create('pautas', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('reuniao_id')->unsigned();
+            $table->string('nome');
+            $table->foreign('reuniao_id')->references('id')->on('reunioes')->onDelete('cascade');
+            
+            
+        });
+
+        
     }
 
     /**

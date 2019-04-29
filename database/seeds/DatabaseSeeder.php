@@ -20,8 +20,13 @@ class DatabaseSeeder extends Seeder
 
         $this->call(UsersTableSeeder::class);
 
-        
         $this->call(LocalizacaoTableSeed::class);
+
+        
+        $this->call(PermissionTableSeeder::class);
+
+        $this->call(RoleTableSeeder::class);
+        
 
 
     }
