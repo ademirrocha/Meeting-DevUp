@@ -4,7 +4,7 @@ Para uso
 
 ##################################################################################
 
-Configurações de acesso ao banco de dados
+ConfiguraÃ§Ãµes de acesso ao banco de dados
 
 -----------------------------------------------------------------------------------
 
@@ -23,6 +23,7 @@ DB_PASSWORD=
 ##################################################################################
 
 com composer instalado (Recomendado)
+disponÃ­vel em https://getcomposer.org/download/
 
 -----------------------------------------------------------------------------------
 
@@ -32,17 +33,17 @@ ou
 
 Criar com os arquivos sqls dentro da pasta sqls
 
-1º Criar meeting-Schema
-2º Criar meeting-Dados
+1Âº Criar meeting-Schema
+2Âº Criar meeting-Dados
 
 
 #########################################################################
 
-Esta parte não precisa se tiver criado com os arquivos sqls
+Esta parte nÃ£o precisa se tiver criado com os arquivos sqls
 
-mas se quiser exxecutar estes comandos deverá comentar 
+mas se quiser exxecutar estes comandos deverÃ¡ comentar 
 no arquivo dentro de app/Providers/AuthServiceProvider
-da linha 34 até a 51
+da linha 34 atÃ© a 51
 
 
 dentro da pasta raiz executar os comandos
@@ -57,7 +58,7 @@ $ php artisan migrate   /*pra criar as tabelas do banco de dados
 $ php artisan db:seed   /*pra inserir os dados das tabelas
 
 
-após isso descomentar as linha comentadas anteriormente
+apÃ³s isso descomentar as linha comentadas anteriormente
 
 
 #########################################################################
@@ -80,7 +81,7 @@ Agora basta acessar o http://localhost:8000
 
 
 
-sem o composer instalado (Não recomendado)
+sem o composer instalado (NÃ£o recomendado)
 
 -----------------------------------------------------------------------------------
 
@@ -95,8 +96,8 @@ ou
 
 Criar com os arquivos sqls dentro da pasta sqls
 
-1º Criar meeting-Schema
-2º Criar meeting-Dados
+1Âº Criar meeting-Schema
+2Âº Criar meeting-Dados
 
 
 
