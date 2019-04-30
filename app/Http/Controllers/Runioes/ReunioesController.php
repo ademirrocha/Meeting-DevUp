@@ -381,4 +381,18 @@ class ReunioesController extends Controller
 
 
 
+    public function showAta($id){
+
+        $reuniao = Reunioes::find($id);
+
+
+        if($reuniao == null || $reuniao->organizacao_id != auth()->user()->organizacao_id){
+                return redirect()->back();
+            }
+
+        return ('Mostrar Ata da reunião '.$reuniao->title);
+    }
+
+
+
 }

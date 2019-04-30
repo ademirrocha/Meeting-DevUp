@@ -22,6 +22,24 @@ SET time_zone = "+00:00";
 -- Database: `meeting`
 --
 
+CREATE Database meeting;
+use meeting;
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `organizacoes`
+--
+
+CREATE TABLE `organizacoes` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `meeting_confirmed` tinyint(1) NOT NULL DEFAULT '0',
+  `razao_social` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cnpj` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fantasia` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- --------------------------------------------------------
 
 --
@@ -31,6 +49,31 @@ SET time_zone = "+00:00";
 CREATE TABLE `cargos` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `cargo` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+
+--
+-- Estrutura da tabela `users`
+--
+
+CREATE TABLE `users` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `organizacao_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
+  `organizacao_confirmed` tinyint(1) NOT NULL DEFAULT '0',
+  `cargo_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
+  `nome` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cpf` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `telefone` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sexo` varchar(9) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `imagem` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -64,22 +107,6 @@ CREATE TABLE `migrations` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `organizacoes`
---
-
-CREATE TABLE `organizacoes` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `meeting_confirmed` tinyint(1) NOT NULL DEFAULT '0',
-  `razao_social` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `cnpj` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `fantasia` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Estrutura da tabela `password_resets`
 --
 
@@ -87,6 +114,25 @@ CREATE TABLE `password_resets` (
   `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `token` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `reunioes`
+--
+
+CREATE TABLE `reunioes` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
+  `localizacao_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
+  `organizacao_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
+  `tipo` enum('Convite','Convocação','Convite Geral','Convocação Geral') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data_inicio` datetime NOT NULL,
+  `data_fim` datetime NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -118,37 +164,6 @@ CREATE TABLE `permissions` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `permission_role`
---
-
-CREATE TABLE `permission_role` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `permission_id` bigint(20) UNSIGNED NOT NULL,
-  `role_id` bigint(20) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `reunioes`
---
-
-CREATE TABLE `reunioes` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
-  `localizacao_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
-  `organizacao_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
-  `tipo` enum('Convite','Convocação','Convite Geral','Convocação Geral') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `data_inicio` datetime NOT NULL,
-  `data_fim` datetime NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Estrutura da tabela `roles`
 --
 
@@ -163,6 +178,18 @@ CREATE TABLE `roles` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `permission_role`
+--
+
+CREATE TABLE `permission_role` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `permission_id` bigint(20) UNSIGNED NOT NULL,
+  `role_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `role_user`
 --
 
@@ -170,30 +197,6 @@ CREATE TABLE `role_user` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `role_id` bigint(20) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `users`
---
-
-CREATE TABLE `users` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `organizacao_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
-  `organizacao_confirmed` tinyint(1) NOT NULL DEFAULT '0',
-  `cargo_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
-  `nome` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `cpf` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `telefone` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sexo` varchar(9) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `imagem` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

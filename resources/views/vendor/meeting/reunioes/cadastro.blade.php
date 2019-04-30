@@ -53,9 +53,10 @@
                 </div>
 
                 <div class="col-sm-6 form-group">
-                            Tipo de Reunião:
+                    <label for="tipo"  class="control-label">Tipo de Reunião:</label>
+                            
 
-                            <select  name='tipo' class="form-control">
+                            <select id="tipo"  name='tipo' class="form-control">
                                 @if(isset($reuniao))
                                     <option value="{{$reuniao->tipo}}">
                                         {{$reuniao->tipo}}
@@ -101,9 +102,9 @@
 
                 <div class="col-sm-6 form-group">
                     <label for="data_ini"  class="control-label">Data de Inicio</label>
-                    <input id="data_ini" name="data_ini" value="{{date('Y-m-d', strtotime($reuniao->data_inicio))}}" type="date" class="form-control{{ session('data_error') ? ' is-invalid' : '' }}" required />
+                    <input id="data_ini" name="data_ini" value="{{date('Y-m-d', strtotime($reuniao->data_inicio  ?? date('Y-m-d')))}}" type="date" class="form-control{{ session('data_error') ? ' is-invalid' : '' }}" required />
                     <label for="hora_ini"  class="control-label">Hora de Inicio</label>
-                    <input id="hora_ini" name="hora_ini" type="time" class="form-control{{ session('data_error') ? ' is-invalid' : '' }}" value="{{date('H:i', strtotime($reuniao->data_inicio)) ?? date('H:i', strtotime('+5 minute', strtotime(date('H:i'))))}}" required/>
+                    <input id="hora_ini" name="hora_ini" type="time" class="form-control{{ session('data_error') ? ' is-invalid' : '' }}" value="{{date('H:i', strtotime($reuniao->data_inicio ?? date('H:i', strtotime('+5 minute', strtotime(date('H:i'))))))}}" required/>
 
                     @if(session('data_error'))
                             <span class="invalid-feedback" role="alert">
@@ -115,9 +116,9 @@
                 
                 <div class="col-sm-6 form-group">
                     <label for="data_fim"  class="control-label">Data de Témino</label>
-                    <input id="data_fim" value="{{date('Y-m-d', strtotime($reuniao->data_fim))}}" name="data_fim" type="date" class="form-control" required/>
+                    <input id="data_fim" value="{{date('Y-m-d', strtotime($reuniao->data_fim  ?? date('Y-m-d')))}}" name="data_fim" type="date" class="form-control" required/>
                     <label for="hora_fim"  class="control-label">Hora de Témino</label>
-                    <input id="hora_fim" name="hora_fim" type="time" class="form-control" value="{{date('H:i', strtotime($reuniao->data_fim)) ?? date('H:i', strtotime('+30 minute', strtotime(date('H:i'))))}}" required/>
+                    <input id="hora_fim" name="hora_fim" type="time" class="form-control" value="{{date('H:i', strtotime($reuniao->data_fim ?? date('H:i', strtotime('+35 minute', strtotime(date('H:i'))))))}}" required/>
                 </div>
 
                 <hr>
@@ -202,20 +203,35 @@
 
                     
                         @if($funcionario->id != auth()->user()->id)
-                            <div class="col-sm-12 form-group ">
-                                <label>
+                            
+                                    @if(isset($reuniao))
+                                        @if($pessoas->contains('user_id', $funcionario->id) )
+                                            <label class="col-sm-12 form-group point p_10" style="background: #DCDCDC;">
+                                                <input id="fun_{{$funcionario->id}}" name="participantes[]" type="checkbox" class="" value="{{$funcionario->id}}" checked='true'/>
+                                                {{$funcionario->nome}}:
 
-                                    @if($pessoas->contains('user_id', $funcionario->id) )
+                                            </label>
+                                         
+                                        @else
+                                            <label class="col-sm-12 form-group  point p_10">
+                                                <input id="fun_{{$funcionario->id}}" name="participantes[]" type="checkbox" class="" value="{{$funcionario->id}}"/>
+                                                {{$funcionario->nome}}:
 
-                                    <input name="participantes[]" type="checkbox" class="" value="{{$funcionario->id}}" checked='true'/>
+                                            </label>
+                                         
+                                        @endif
                                     @else
-                                    <input name="participantes[]" type="checkbox" class="" value="{{$funcionario->id}}"/>
+                                    
+                                        <label class="col-sm-12 form-group  point p_10">
+                                            <input id="fun_{{$funcionario->id}}" name="participantes[]" type="checkbox" class="" value="{{$funcionario->id}}"/>
+                                            {{$funcionario->nome}}:
+
+                                            </label>
+                                        
                                     @endif
 
-                                    {{$funcionario->nome}}:
-
-                                </label>
-                            </div>
+                                    
+                           
                             <hr>
                         @endif
                            
@@ -226,14 +242,14 @@
                     @endif
 
                 </div>
-
+                @if(isset($reuniao))
                 <input type="hidden" name="reuniao" value="{{$reuniao->id}}">
-
+                @endif
                 <div class="col-sm-12 form-group">
                     
                     <button class="btn  btn-primary" type="submit">
                         <i class="fas fa-save"></i>
-                        Salvar
+                         Salvar
                         @if(isset($reuniao))
                          Alterações
                         @endif

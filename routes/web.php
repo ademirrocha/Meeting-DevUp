@@ -78,6 +78,8 @@ Route::group(['middleware', ['auth'], 'namespace' => 'Runioes' ], function(){
 
 	Route::POST('reunioes/editar', 'ReunioesController@editarReuniao')->name('reunioes/editar');
 
+	Route::get('reuniao/{id}/ata', 'ReunioesController@showAta')->name('reuniao/{id}/ata');
+	
 	
 	
 });

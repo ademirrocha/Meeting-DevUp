@@ -3,9 +3,6 @@
 @section('css')
 
 	
-	
-    
-
 
 @endsection
 
@@ -24,7 +21,7 @@
        		$detalhe_reuniao = App\Models\Reunioes::find($reuniao->reuniao_id);
        		?>
 
-         
+          
    		      <!-- small box -->
             <div class="small-box bg-aqua ">
               <div class="inner">
@@ -37,8 +34,20 @@
                 <p>Facilitador: {{App\User::find($reuniao->user_id)->nome}}</p>
                 <p>Tipo de Reunião: {{$detalhe_reuniao->tipo}}</p>
               </div>
-              
-              <a href="#" onclick="redirectReuniao('{{$reuniao->reuniao_id}}', `{{route('reuniao')}}`)" class="small-box-footer">Mais detalhes <i class="fa fa-arrow-circle-right"></i></a>
+
+             
+
+              @if( $detalhe_reuniao->data_inicio <= date('Y-m-d H:i:s') && $detalhe_reuniao->data_fim > date('Y-m-d H:i:s') )
+                
+                <a href="{{url("reuniao/$reuniao->reuniao_id/ata")}}"  class="small-box-footer">
+                @else
+                
+                  <a href="#" onclick="redirectReuniao('{{$reuniao->reuniao_id}}', `{{route('reuniao')}}`)" class="small-box-footer">
+              @endif
+
+
+                Mais detalhes <i class="fa fa-arrow-circle-right"></i>
+              </a>
             </div>
           
           @endforeach
