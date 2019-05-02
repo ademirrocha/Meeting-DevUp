@@ -51,7 +51,8 @@
 
                                         
 
-                                         @foreach($permissoes as $permissao)
+                                        @foreach($permissoes as $permissao)
+
 
                                          @if($permissao->permissoes->contains('nome', 'update_reuniao') && $reuniao->user_id == auth()->user()->id)
                                             <a class="btn  btn-default" alt="Clique para visualizar ou editar essa reunião" title="Clique para visualizar ou editar essa reunião" href="{{url("reuniao/$reuniao->id/view")}}">
@@ -61,9 +62,7 @@
                                          @elseif($permissao->permissoes->contains('nome', 'view_reuniao'))
 
                                                 <a class="btn  btn-default btn-xs" href="{{url("reuniao/$reuniao->id/view")}}" alt="Clique para ver detalhes dessa reunião" title="Clique para ver detalhes dessa reunião">
-                                                    <i class="fa  fa-info-circle">
-                                                        
-                                                    </i>
+                                                    <i class="fa  fa-info-circle"></i>
                                                 </a>
                                            
                                             @endif

@@ -17,6 +17,7 @@ class CreateUsersReuniaoTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned()->default(1);
             $table->bigInteger('reuniao_id')->unsigned()->default(1);
+            $table->boolean('confimou_presenca')->default(0);
             $table->boolean('presente')->default(0);
             
             $table->timestamps();

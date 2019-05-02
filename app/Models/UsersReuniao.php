@@ -11,7 +11,7 @@ class UsersReuniao extends Model
 
 
     protected $fillable = [
-        'user_id', 'reuniao_id', 'tipo', 'presente',
+        'user_id', 'reuniao_id', 'confimou_presenca', 'presente',
     ];
 
 

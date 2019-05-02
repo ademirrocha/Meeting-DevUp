@@ -35,17 +35,18 @@ class AuthServiceProvider extends ServiceProvider
         $permissions = Permission::with('roles')->get();
 
 
+        
         foreach ($permissions as $permission) {
 
             $gate->define($permission->nome, function(User $user) use ($permission){
-                return auth()->user()->hasPermission($permission);
+                return $user->hasPermission($permission);
             });
 
         }
 
         $gate->before(function(User $user, $ability){
 
-            return auth()->user()->hasAnyRoles('super_admin');
+            return $user->hasAnyRoles('super_admin');
 
         });
         

@@ -18,6 +18,7 @@ class Reunioes extends Model
         'localizacao_id',
         'organizacao_id',
         'title',
+        'tipo',
         'data_inicio',
         'data_fim',
     ];

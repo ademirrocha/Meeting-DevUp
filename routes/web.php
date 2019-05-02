@@ -80,8 +80,9 @@ Route::group(['middleware', ['auth'], 'namespace' => 'Runioes' ], function(){
 
 	Route::get('reuniao/{id}/ata', 'ReunioesController@showAta')->name('reuniao/{id}/ata');
 	
+	Route::get('reuniao/{id}/confirmar_presenca/{id2}/confirm', 'ReunioesController@confirmarPresenca')->name('reuniao/{id}/confirmar_presenca/{id2}/confirm');
 	
-	
+
 });
 
 

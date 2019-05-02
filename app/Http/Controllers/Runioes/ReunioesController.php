@@ -116,6 +116,7 @@ class ReunioesController extends Controller
             foreach ($request->participantes as $key => $value) {
                 $create = UsersReuniao::create([
                 'reuniao_id' => $order,
+                'confimou_presenca' => 1,
                 'user_id' => $value,
                 
                 ]);
@@ -393,6 +394,28 @@ class ReunioesController extends Controller
             }
 
         return ('Mostrar Ata da reunião '.$reuniao->title);
+    }
+
+
+    public function confirmarPresenca($reuniao, $usuario){
+
+        if( $usuario != auth()->user()->id ){
+            return redirect()->back();
+        }
+
+        $user_reuniao = UsersReuniao::where('reuniao_id', $reuniao)->where('user_id', $usuario)->get();
+
+        $user_reuniao[0]->confimou_presenca = 1;
+
+        $save = $user_reuniao[0]->save();
+
+        if ($save) {
+            return redirect()->back()->with('sucesso', 'Você confimou Presença Nessa Reunião!');
+        }else{
+            return redirect()->back()->with('error', 'Não foi possível confirmar sua Presença!');
+        }
+
+        
     }
 
 

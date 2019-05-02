@@ -209,6 +209,7 @@ CREATE TABLE `users_reuniao` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
   `reuniao_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
+  `confimou_presenca` tinyint(1) NOT NULL DEFAULT '0',
   `presente` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
