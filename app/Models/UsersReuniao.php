@@ -14,4 +14,7 @@ class UsersReuniao extends Model
         'user_id', 'reuniao_id', 'tipo', 'presente',
     ];
 
+
+    
+
 }

@@ -66,7 +66,7 @@
 					@else
 						<li>
 					@endif
-					<a href="{{route('locais')}}"><i class="fa fa-map-marker"></i><span>Locais de Reuniões</span></a>
+					<a href="{{url('locais')}}"><i class="fa fa-map-marker"></i><span>Locais de Reuniões</span></a>
 				</li>
 				@if( 
 					$menu == 'reunioes' ||

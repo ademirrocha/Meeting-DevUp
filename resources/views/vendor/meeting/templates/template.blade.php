@@ -24,7 +24,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
     
 
-   
+
 
 
       @yield('css')
@@ -138,7 +138,7 @@
     <script  src="{{asset('vendor/meeting/javascripts/bootstrap.mim.js')}}"></script>
     <script  src="{{asset('vendor/meeting/javascripts/jquery.min.js')}}"></script>
 
-   
+   @yield('js')
     
 </body>
 </html>

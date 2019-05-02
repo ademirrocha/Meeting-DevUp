@@ -133,9 +133,11 @@ class ReunioesController extends Controller
 
 
 
-    public function showReuniao(Request $request){
+    public function showReuniao($id){
 
-        $reuniao = Reunioes::with('local')->find($request->reuniao);
+
+
+        $reuniao = Reunioes::with('local')->find($id);
 
         if($reuniao != null){
             if($reuniao->organizacao_id != auth()->user()->organizacao_id){

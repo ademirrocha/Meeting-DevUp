@@ -32,7 +32,7 @@ class Organizacao extends Model
 
     //relacionamento entre organização e reunioes
     public function reunioes(){
-        return $this->hasMany(Reunioes::class);
+        return $this->hasMany(Reunioes::class, 'organizacao_id');
     }
 
 

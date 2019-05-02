@@ -2,7 +2,9 @@
 
 @section('css')
 
-	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.css"/>
+ 
+
 
 @endsection
 
@@ -16,41 +18,15 @@
       <section class="content left">
         <h2>Calendário de Reuniões</h2>
 
-       		@foreach($reunioes as $reuniao)
-       		<?php
-       		$detalhe_reuniao = App\Models\Reunioes::find($reuniao->reuniao_id);
-       		?>
+       		
+        
 
-          
-   		      <!-- small box -->
-            <div class="small-box bg-aqua ">
-              <div class="inner">
-                <h3>{{$detalhe_reuniao->pauta}}</h3>
-                <p>Data: {{$detalhe_reuniao->data_inicio}}</p>
+          <div class="panel panel-primary">
+            <div class="panel-body calendario" >
                 
-                <p>Local: {{$detalhe_reuniao->local->nome}}</p>
-
-
-                <p>Facilitador: {{App\User::find($reuniao->user_id)->nome}}</p>
-                <p>Tipo de Reunião: {{$detalhe_reuniao->tipo}}</p>
-              </div>
-
-             
-
-              @if( $detalhe_reuniao->data_inicio <= date('Y-m-d H:i:s') && $detalhe_reuniao->data_fim > date('Y-m-d H:i:s') )
-                
-                <a href="{{url("reuniao/$reuniao->reuniao_id/ata")}}"  class="small-box-footer">
-                @else
-                
-                  <a href="#" onclick="redirectReuniao('{{$reuniao->reuniao_id}}', `{{route('reuniao')}}`)" class="small-box-footer">
-              @endif
-
-
-                Mais detalhes <i class="fa fa-arrow-circle-right"></i>
-              </a>
+              {!! $calendar_details->calendar() !!}
             </div>
-          
-          @endforeach
+          </div>
 
           @if($reunioes->count() == 0)
             <div class="small-box bg-aqua ">
@@ -70,3 +46,19 @@
     </div>
 	
 @endsection
+
+
+@section('js')
+
+<!-- Scripts -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.js"></script>
+
+<script  src="{{asset('vendor/meeting/fullcalendar/lang/pt-br.js')}}"></script>
+
+{!! $calendar_details->script() !!}
+
+@endsection
+
+
