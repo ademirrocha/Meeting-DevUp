@@ -215,6 +215,23 @@ CREATE TABLE `users_reuniao` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `atas`
+--
+
+CREATE TABLE `atas` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `reuniao_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
+  `ata` longtext COLLATE utf8mb4_unicode_ci NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 --
 -- Indexes for dumped tables
 --
@@ -440,6 +457,31 @@ ALTER TABLE `users`
 ALTER TABLE `users_reuniao`
   ADD CONSTRAINT `users_reuniao_reuniao_id_foreign` FOREIGN KEY (`reuniao_id`) REFERENCES `reunioes` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `users_reuniao_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+
+ALTER TABLE `atas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `atas_reuniao_id_foreign` (`reuniao_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `atas`
+--
+ALTER TABLE `atas`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Limitadores para a tabela `atas`
+--
+ALTER TABLE `atas`
+  ADD CONSTRAINT `atas_reuniao_id_foreign` FOREIGN KEY (`reuniao_id`) REFERENCES `reunioes` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Reunioes;
 use App\Models\Localizacao;
 use App\Models\Organizacao;
+use App\Models\Ata;
 use App\User;
 
 use Illuminate\Support\Facades\DB;
@@ -53,6 +54,10 @@ class Reunioes extends Model
    
     public function reunioes(){
         return $this->belongsTo(Organizacao::class);
+    }
+
+    public function ata(){
+        return $this->hasOne(Ata::class, 'reuniao_id');
     }
 
 }

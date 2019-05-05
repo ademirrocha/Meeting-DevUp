@@ -9,6 +9,7 @@ use App\Models\Reunioes;
 use App\Models\Localizacao;
 use App\Models\UsersReuniao;
 use App\Models\Organizacao;
+use App\Models\Ata;
 use App\User;
 
 use Illuminate\Support\Facades\DB;
@@ -43,6 +44,7 @@ class ReunioesController extends Controller
 
 
     public function cadastrarReuniao(Request $request){
+
 
 
     	$dataIni = ($request->data_ini. ' '. $request->hora_ini.':00');
@@ -147,19 +149,23 @@ class ReunioesController extends Controller
 
             $pessoas = UsersReuniao::where('reuniao_id', $reuniao->id)->get();
 
+            $funcionarios = User::where('organizacao_id', auth()->user()->organizacao_id)->get();
+
+            $pautas = Reunioes::pautas($reuniao->id);
+
             
+             if($reuniao->data_inicio < date('Y-m-d H:i:s') && $reuniao->data_fim > date('Y-m-d H:i:s')){
+                    return redirect("reuniao/$reuniao->id/ata");
+                }
+
+
 
             if($reuniao->user_id == auth()->user()->id){
 
                 $localizacoes = Localizacao::where('organizacao_id', auth()->user()->organizacao_id)->get();
 
-                $funcionarios = User::where('organizacao_id', auth()->user()->organizacao_id)->get();
-
-                $pautas = Reunioes::pautas($reuniao->id);
 
                 
-
-
                 return view('vendor.meeting.reunioes.cadastro', compact('reuniao', 'pessoas', 'localizacoes', 'funcionarios', 'pautas'));
 
             }else{
@@ -393,7 +399,25 @@ class ReunioesController extends Controller
                 return redirect()->back();
             }
 
-        return ('Mostrar Ata da reunião '.$reuniao->title);
+            if($reuniao->user_id == auth()->user()->id){
+
+                if( ! Ata::where('reuniao_id', $id)->exists()){
+                    Ata::create([
+                        'reuniao_id' => $id,
+                    ]); 
+                }
+
+                //$ata = $reuniao->ata;
+
+                $pautas = Reunioes::pautas($reuniao->id);
+
+               
+                return view('vendor.meeting.reunioes.ata-edite', compact('reuniao', 'pautas'));
+            }else{
+                return view('vendor.meeting.reunioes.ata', compact('reuniao'));
+            }
+
+        
     }
 
 
@@ -416,6 +440,33 @@ class ReunioesController extends Controller
         }
 
         
+    }
+
+
+    public function atualizaAta(Request $request, $id){
+
+        $reuniao = Reunioes::find($id);
+
+        
+        
+
+        if($reuniao->user_id == auth()->user()->id){
+
+            $ata = Ata::where('reuniao_id', $id)->get();
+
+
+            $ata[0]->ata = $request->ata;
+
+            $ata[0]->save();
+
+        
+
+            
+        }else{
+            return ('false');
+        }
+
+        return ('true');
     }
 
 

@@ -49,9 +49,9 @@ class HomeController extends Controller
             //dd($event->data_inicio);
             $event_list[] = Calendar::event(
                 $event->title,
-                true,
-                new \DateTime($event->data_inicio),
-                new \DateTime($event->data_inicio.' +1 day'),
+                false,
+                $event->data_inicio,
+                $event->data_inicio,
                 $event->id,
                 [
                     'url' => 'reuniao/'.$event->id.'/view',
