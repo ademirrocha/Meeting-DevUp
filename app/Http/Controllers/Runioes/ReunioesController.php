@@ -152,7 +152,7 @@ class ReunioesController extends Controller
 
 
                 //Enviar notificação pra todos participantes
-                //$participante->notify(new ReuniaoNotify($reuniao, $pautas, $value));
+                $participante->notify(new ReuniaoNotify($reuniao, $pautas, $value));
 
             }
             
@@ -452,6 +452,10 @@ class ReunioesController extends Controller
 
 
     public function confirmarPresenca($reuniao, $usuario){
+
+        if(auth()->user() == null){
+            return redirect('login');
+        }
 
         if( $usuario != auth()->user()->id ){
             return redirect()->back();

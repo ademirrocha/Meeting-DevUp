@@ -55,9 +55,19 @@ class ReuniaoNotify extends Notification
     public function toMail($notifiable)
     {
 
+        $properties = $this->pautas;
+        $property_info = "";
+        foreach($properties as $property) {
+            $property_nome = $property->nome;
+            $property_info = $property_info . $property_nome . " || ";
+        }
+
         return (new MailMessage)
+                    ->replyTo($notifiable->email, $notifiable->nome)
+                    ->from('meeting.dev.up@gmail.com', 'Meeting')
                     ->subject("Nova Reunião: {$this->reuniao->title}")
-                    ->line("Pautas: {$this->pautas[0]->nome}")
+                    ->line("Pautas que serão discutidas:")
+                    ->line(nl2br($property_info))
                     ->action('Confirmar Presença', url("reuniao/{$this->reuniao->id}/confirmar_presenca/{$this->usuario}/confirm"))
                     ->line('Obrigado por usar o Meeting');
                     

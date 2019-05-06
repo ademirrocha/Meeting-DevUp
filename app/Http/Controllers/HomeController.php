@@ -30,6 +30,9 @@ class HomeController extends Controller
     public function index()
     {
         
+
+        
+
         $organizacaoUser = Organizacao::find(auth()->user()->organizacao_id);
 
         if($organizacaoUser->fantasia == 'Nenhuma'){
