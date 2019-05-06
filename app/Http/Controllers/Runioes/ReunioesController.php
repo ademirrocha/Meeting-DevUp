@@ -11,6 +11,8 @@ use App\Models\UsersReuniao;
 use App\Models\Organizacao;
 use App\Models\Ata;
 use App\User;
+use App\Notifications\ReuniaoNotify;
+use App\Notifications\meetingNotify;
 
 use Illuminate\Support\Facades\DB;
 
@@ -23,12 +25,11 @@ class ReunioesController extends Controller
 
         $permissoes = auth()->user()->rolesUser();
 
-    	$reunioes = Reunioes::where('organizacao_id', auth()->user()->organizacao_id)->get();
+    	$reunioes = Reunioes::where('organizacao_id', auth()->user()->organizacao_id)->orderBy('data_inicio', 'asc')->get();
 
     	return view('vendor.meeting.reunioes.listar', compact('reunioes', 'permissoes'));
 
     }
-
 
     public function showCadastroReuniao(){
     	$localizacoes = Localizacao::where('organizacao_id', auth()->user()->organizacao_id)->get();
@@ -40,9 +41,6 @@ class ReunioesController extends Controller
     	return view('vendor.meeting.reunioes.cadastro', compact('localizacoes', 'funcionarios'));
     }
 
-
-
-
     public function cadastrarReuniao(Request $request){
 
 
@@ -50,8 +48,6 @@ class ReunioesController extends Controller
     	$dataIni = ($request->data_ini. ' '. $request->hora_ini.':00');
     	$dataFim = ($request->data_fim. ' '. $request->hora_fim.':00');
 
-    	
-    		
 
     	if($dataIni >= $dataFim || $dataIni < date('Y-m-d H:s:i') || $request->localizacao == '' || $request->participantes == null || $request->pauta[0] == null){
     		$erro = array();
@@ -83,6 +79,23 @@ class ReunioesController extends Controller
 
     	}
 
+
+        $existsConvocaoGeral = $this->convocacaoGeral($request);
+
+        if( $existsConvocaoGeral ){
+
+            return redirect()->back()->with('error', 'Não foi possível agendar a reunião. Pois já existe uma reunião do tipo Convocação Geral nesse mesmo horário!');
+
+        }
+
+        $existsNaoGeral = $this->convocacaoNaoGeral($request);
+
+
+        if( $existsNaoGeral && $request->tipo == 'Convocação Geral' ){
+            $this->solicitarMudancaHorario($request);
+        }
+        
+       
        
     	$create = Reunioes::create([
             'organizacao_id' => auth()->user()->organizacao_id,
@@ -107,6 +120,9 @@ class ReunioesController extends Controller
                 'user_id' => auth()->user()->id,
                 
                 ]);
+
+           
+
             //Cadastra As Pautas
             foreach ($request->pauta as $key => $value) {
                 DB::table('pautas')->insert([
@@ -114,6 +130,15 @@ class ReunioesController extends Controller
                 ]);
             }
 
+            $reuniao = Reunioes::find($order);
+
+            $pautas = Reunioes::pautas($order);
+
+
+             auth()->user()->notify(new ReuniaoNotify($reuniao, $pautas, auth()->user()->id));
+
+
+            
 
             foreach ($request->participantes as $key => $value) {
                 $create = UsersReuniao::create([
@@ -122,19 +147,30 @@ class ReunioesController extends Controller
                 'user_id' => $value,
                 
                 ]);
+
+                $participante = User::find($value);
+
+
+                //Enviar notificação pra todos participantes
+                //$participante->notify(new ReuniaoNotify($reuniao, $pautas, $value));
+
             }
             
 
+            if( $existsNaoGeral && $request->tipo == 'Convocação Geral' ){
+
+            return redirect()->back()->with('sucesso', 'Reunião agendada com sucesso. Havia outras reuniões marcadas para este horário, mas foi solicitado a mudança do horário!');
+
+        }
+
             
-
-
             return redirect()->back()->with('sucesso', 'Reunião agendada com sucesso!');
+
+
         }else{
             return redirect()->back()->with('error', 'Não foi possível agendar a reunião!');
         }
     }
-
-
 
     public function showReuniao($id){
 
@@ -179,9 +215,6 @@ class ReunioesController extends Controller
 
     }
 
-
-
-
     public function adicionarPessoasNaReuniao(Request $request){
 
         $reuniao = Reunioes::find($request->reuniao);
@@ -218,11 +251,8 @@ class ReunioesController extends Controller
        }else{
             return redirect()->back();
        }
-
-       
+   
     }
-
-
 
     public function editarReuniao(Request $request){
 
@@ -388,8 +418,6 @@ class ReunioesController extends Controller
 
     }
 
-
-
     public function showAta($id){
 
         $reuniao = Reunioes::find($id);
@@ -411,8 +439,10 @@ class ReunioesController extends Controller
 
                 $pautas = Reunioes::pautas($reuniao->id);
 
+                $pessoas = UsersReuniao::where('reuniao_id', $reuniao->id)->get();
+
                
-                return view('vendor.meeting.reunioes.ata-edite', compact('reuniao', 'pautas'));
+                return view('vendor.meeting.reunioes.ata-edite', compact('reuniao', 'pautas', 'pessoas'));
             }else{
                 return view('vendor.meeting.reunioes.ata', compact('reuniao'));
             }
@@ -434,9 +464,9 @@ class ReunioesController extends Controller
         $save = $user_reuniao[0]->save();
 
         if ($save) {
-            return redirect()->back()->with('sucesso', 'Você confimou Presença Nessa Reunião!');
+            return redirect("reuniao/$reuniao/view")->with('sucesso', 'Você confimou Presença Nessa Reunião!');
         }else{
-            return redirect()->back()->with('error', 'Não foi possível confirmar sua Presença!');
+            return redirect("reuniao/$reuniao/view")->with('error', 'Não foi possível confirmar sua Presença!');
         }
 
         
@@ -469,6 +499,109 @@ class ReunioesController extends Controller
         return ('true');
     }
 
+
+    public function convocacaoGeral($request){
+
+        $dataIni = ($request->data_ini. ' '. $request->hora_ini.':00');
+        $dataFim = ($request->data_fim. ' '. $request->hora_fim.':00');
+
+        
+
+        if( Reunioes::where('tipo', 'Convocação Geral')->where('data_inicio', '>=', $dataIni)->where('data_fim', '<', $dataFim)->exists() ){
+            //verifica se entre e entre
+            return true;
+
+        }else if( Reunioes::where('tipo', 'Convocação Geral')->where('data_inicio', '>=', $dataIni)->where('data_inicio', '<', $dataFim)->where('data_fim', '>=', $dataFim)->exists() ){
+            //verifica se entre e depois
+            return true;
+
+        }else if( Reunioes::where('tipo', 'Convocação Geral')->where('data_inicio', '<', $dataIni)->where('data_fim', '>=', $dataIni)->where('data_fim', '<', $dataFim)->exists() ){
+            //verifica se antes e entre
+            return true;
+
+        }else if(Reunioes::where('tipo', 'Convocação Geral')->where('data_inicio', '<', $dataIni)->where('data_fim', '>=', $dataIni)->exists()){
+            //verifica se antes  e  depois
+            return true;
+
+        }else{
+
+            return (false);
+
+        }
+
+    }
+
+
+
+
+    public function convocacaoNaoGeral($request){
+
+        $dataIni = ($request->data_ini. ' '. $request->hora_ini.':00');
+        $dataFim = ($request->data_fim. ' '. $request->hora_fim.':00');
+
+        
+
+        if( Reunioes::where('tipo', '!=', 'Convocação Geral')->where('data_inicio', '>=', $dataIni)->where('data_inicio', '<', $dataFim)->exists() ){
+            //verifica se entre e entre
+            return true;
+
+        }else if( Reunioes::where('tipo', '!=', 'Convocação Geral')->where('data_inicio', '>=', $dataIni)->where('data_inicio', '<', $dataFim)->where('data_fim', '>=', $dataFim)->exists() ){
+            //verifica se entre e depois
+            return true;
+
+        }else if( Reunioes::where('tipo', '!=', 'Convocação Geral')->where('data_inicio', '<', $dataIni)->where('data_fim', '>=', $dataIni)->where('data_fim', '<', $dataFim)->exists() ){
+            //verifica se antes e entre
+            return true;
+
+        }else if(Reunioes::where('tipo', '!=', 'Convocação Geral')->where('data_inicio', '<', $dataIni)->where('data_fim', '>=', $dataIni)->exists()){
+            //verifica se antes  e  depois
+            return true;
+
+        }else{
+
+            return (false);
+
+        }
+
+    }
+
+
+    public function solicitarMudancaHorario($request){
+        $dataIni = ($request->data_ini. ' '. $request->hora_ini.':00');
+        $dataFim = ($request->data_fim. ' '. $request->hora_fim.':00');
+
+        $reunioes = Reunioes::where('data_inicio', '>=', $dataIni)->where('data_inicio', '<', $dataFim)->get();
+
+       $this->criaNotifyMudancaHorario($reunioes);
+
+        $reunioes = Reunioes::where('data_inicio', '>=', $dataIni)->where('data_inicio', '<', $dataFim)->where('data_fim', '>=', $dataFim)->get();
+
+        $this->criaNotifyMudancaHorario($reunioes);
+
+        $reunioes = Reunioes::where('data_inicio', '<', $dataIni)->where('data_fim', '>=', $dataIni)->where('data_fim', '<', $dataFim)->get();
+
+        $this->criaNotifyMudancaHorario($reunioes);
+
+
+        $reunioes = Reunioes::where('data_inicio', '<', $dataIni)->where('data_fim', '>=', $dataIni)->get();
+
+        $this->criaNotifyMudancaHorario($reunioes);
+
+    }
+
+    public function criaNotifyMudancaHorario($reunioes){
+         foreach ($reunioes as $reuniao) {
+            $create = meetingNotify::create([
+                'user_id' => $reuniao->user_id,
+                'user_autor_id' => auth()->user()->id,
+                'title' => 'Solicitação de mudança de horário de reunião',
+                'texto' => 'O usuário '. auth()->user()->nome . ' solicita a mudança de horário de sua reunião: '. $reuniao->title. ', pois foi mardada uma reunião do tipo Convocação Geral para este horário.',
+
+                'table_references' => 'reunioes',
+                'table_references_id' => $reuniao->id,
+            ]);
+        }
+    }
 
 
 }

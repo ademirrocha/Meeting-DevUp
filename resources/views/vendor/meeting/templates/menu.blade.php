@@ -1,7 +1,11 @@
 @auth
 	<?php
 		$menu = request()->route()->getName();
+
+		$permissoes = auth()->user()->rolesUser();
 	?>
+
+
 
 	<aside class="aw-sidebar  js-sidebar">
 		<nav class="aw-menu">
@@ -17,6 +21,9 @@
 				@endif
 					<a href="{{route('home')}}"><i class="fa  fa-home"></i><span>Página Inicial</span></a>
 				</li>
+				<li>
+					<hr>
+				</li>
 					@if(
 						$menu == 'acount' || 
 						$menu == 'acount/edit' 
@@ -29,12 +36,20 @@
 				</li>
 
 					
-				<li class="">
+				@if(
+						$menu == 'admin/usuarios' 
+					)
+						<li class="is-selected">
+					@else
+						<li>
+					@endif
 
 					<a href="{{route('usuarios')}}"><i class="fa  fa-users"></i><span>Usuários</span></a>
 
 				</li>
-				@if(Auth::user()->cargo_id == 2)
+				
+
+				@if( $permissoes[0]->nome == 'admin' || $permissoes[0]->nome == 'super_admin')
 
 					@if(
 						$menu == 'admin/organizacoes' 
@@ -56,11 +71,11 @@
 					
 
 					</li>
-					@endif
+				@endif
 
 					@if( 
 						$menu == 'locais' ||
-						$menu == 'local/cadastrar' 
+						$menu == 'locais/cadastrar' 
 					)
 						<li class="is-selected">
 					@else
@@ -90,8 +105,21 @@
 						<a href="{{route('permissions')}}"><i class="fa fa-user-circle"></i><span>Permissões de usuários</span></a>
 					</li>
 				@endcan
+
+
+				<li>
+					<hr>
+				</li>
+				<li>
+				<a class="aw-sair" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i> Sair</a>
+				</li>
+
+
 			</ul>
+
 		</nav>
+
+
 	</aside>
 
 @endauth

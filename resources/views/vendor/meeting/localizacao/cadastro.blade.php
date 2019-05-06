@@ -2,6 +2,11 @@
 
 @section('content')
     <div class="container-fluid">
+        @section('bread-crumbs')
+          <a href="{{url('home')}}">Página Inicial</a>/
+          <a href="{{url('locais')}}">Locais de Reuniões</a>/ 
+          <a href="{{url('locais/cadastrar')}}">Cadastro de Locais de Reuniões</a>
+        @endsection
         <form action="{{ route('locais/cadastro') }}"  method="post">
             @csrf
             <h3>Cadastro Locais de Reuniões</h3>

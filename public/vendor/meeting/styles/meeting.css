@@ -6,3 +6,102 @@
 	width: 70%;
 	border: solid 1px;
 }
+
+
+
+.center{
+	text-align: center;
+}
+
+.strong{
+    font-weight:  bold;
+}
+
+.icon-notify{
+	position: relative;
+	margin-left: 20px;
+	cursor: pointer;
+}
+
+.icon-notify i{
+    text-decoration: none;
+}
+
+.icon-notify span{
+	position: absolute;
+    top: -15px;
+    left: 10px;
+	border-radius:20px;
+	padding: 3px 8px 3px 8px;
+    width:auto !important;
+    background-color:red;
+}
+
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+    opacity: 1;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 400px;
+    left: -300px;
+    right: 0;
+    top: 15px;
+    background-color: #B0C4DE;
+    color: #000;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+
+
+.notifycations{
+
+    max-height: 300px;
+    overflow: auto;
+    line-height: 30px;
+
+
+}
+.notifycations a{
+    text-decoration: none;
+    color: #000;
+}
+.notifycations .title, hr{
+   
+    width: 100%; 
+    text-align: center; 
+    font-size: 18px; 
+    font-weight: bold;
+}
+
+
+
+.dados-perfil{
+
+    max-height: 200px;
+    min-height: 200px;
+    max-width: 300px;
+    min-width: 300px;
+    overflow: auto;
+    
+    left: -120px !important;
+   
+
+}

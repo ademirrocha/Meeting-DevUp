@@ -232,6 +232,26 @@ CREATE TABLE `atas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `meeting_notifies`
+--
+
+CREATE TABLE `meeting_notifies` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `user_autor_id` bigint(20) DEFAULT NULL,
+  `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `texto` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `read` tinyint(1) NOT NULL DEFAULT '0',
+  `table_references` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `table_references_id` bigint(20) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 --
 -- Indexes for dumped tables
 --
@@ -482,6 +502,37 @@ ALTER TABLE `atas`
 --
 ALTER TABLE `atas`
   ADD CONSTRAINT `atas_reuniao_id_foreign` FOREIGN KEY (`reuniao_id`) REFERENCES `reunioes` (`id`) ON DELETE CASCADE;
+
+
+
+--
+-- Indexes for table `meeting_notifies`
+--
+ALTER TABLE `meeting_notifies`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `meeting_notifies_user_id_foreign` (`user_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `meeting_notifies`
+--
+ALTER TABLE `meeting_notifies`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Limitadores para a tabela `meeting_notifies`
+--
+ALTER TABLE `meeting_notifies`
+  ADD CONSTRAINT `meeting_notifies_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -19,12 +19,22 @@
 
 
 
-    		
+    		 <div class="col-sm-12 btn-group ">
+		        	
+		        	
+		        	<button type="submit" class="btn btn-warning " > Suspender Reunião </button> 
+
+		        	<button type="submit" class="btn btn-danger " > Cancelar Reunião </button> 
+
+		        	<button type="submit" class="btn btn-success " > Encerrar Reunião </button>
+		        	
+		        </div>
 	        
 	        	<h3>Redigir Ata</h3>
 	        	<div class="col-sm-6 form-group">
 		        	<label class="control-label" id="situacao"></label>
 		        </div>
+
 		        <div class="row">
 			    <div class="col-sm-6 form-group">
 	        	<form id="form-ata" action="{{url("reuniao/$reuniao->id/ata/salvar")}}"  method="post">
@@ -61,15 +71,25 @@
 		        </div>
 
 		        <div class="col-sm-3 form-group">
-		        	Ações:
-		        	<br><br>
-		        	<button type="submit" class="btn btn-primary" > Suspender Reunião </button><br><br>
+		        	Lista de Presença:<br><br>
+		        	<hr>
+		        	@foreach($pessoas as $pessoa)
 
-		        	<button type="submit" class="btn btn-primary" > Cancelar Reunião </button><br><br>
+		        	<?php $user = App\User::find($pessoa->user_id); ?>
 
-		        	<button type="submit" class="btn btn-primary" > Encerrar Reunião </button><br><br>
-		        	
+		        		
+
+		        		 <label class="col-sm-12 form-group  point p_10">
+                                                
+                                                {{$user->nome}}
+                                                <input id="fun_{{$user->id}}" name="participantes[]" type="checkbox" class="" value="{{$user->id}}"/>
+
+                                            </label>
+		        		<hr>
+		        	@endforeach
 		        </div>
+
+		       
 	        	
 	        </div>
 	    

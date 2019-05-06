@@ -2,6 +2,12 @@
 
 @section('content')
     <div class="container-fluid">
+        @section('bread-crumbs')
+            <a href="{{url('home')}}">Página Inicial</a>/
+            <a href="{{url('admin/organizacoes')}}">Organizações</a>
+        @endsection
+        
+        
     <form>
         <input id="token_page" type="hidden" name="_token" value="{{csrf_token()}}">
         <h3>Listagem Organização</h3>

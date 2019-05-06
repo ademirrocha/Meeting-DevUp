@@ -48,6 +48,8 @@
 
 
     <header class="aw-topbar">
+
+
         <div class="logo">
             <h1><a href="{{ route('home') }}">Meeting</a></h1>
         </div>
@@ -62,9 +64,7 @@
                 
                 
 
-                <div class="sair">
-                    <a class="aw-sair" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><em class="fa  fa-sign-out"></em>Sair</a>
-                </div>
+                
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                 </form>
@@ -81,19 +81,96 @@
 
             </span>
 
+
+            <div class="icon-notify tooltip" icon="">
+                <i class="fas fa-envelope"></i>
+
+                        <?php 
+                            $notificacoes = App\Notifications\meetingNotify::notificacoes(); 
+                            $naoLidas = App\Notifications\meetingNotify::notificacoesNoLidas(); 
+                        ?>
+                         
+                        <span class="count">
+                            {{$naoLidas}}
+                        </span>
+                        <div class="notifycations tooltiptext">
+
+
+
+                            <div class="title">Suas Notificações ({{$naoLidas}} Não Lidas)</div>
+                            
+                            
+                            @foreach($notificacoes as $notify)
+                            <a href="{{url("notificacoes/$notify->id/view")}}">
+                                
+                                <b>
+                                    {{$notify->user->nome}}: 
+                                </b>
+                                @if(! $notify->read)
+                                    <b>
+                                        {{$notify->title}}
+                                    </b>
+                                @else
+                                    {{$notify->title}}
+                                @endif
+
+                                 </a>
+
+                            <hr>
+
+                            @endforeach
+                        </div>
+                    </div>
+
                 
-            <span class="dados-user ">
+            <span class="dados-user  tooltip">
                 Bem Vindo! {{Auth::user()->nome}}
 
-                @if(Auth::user()->imagem == null)
-                    <div class="circle">
-                        <img src="{{ asset('storage/users/perfil.png') }}" class="imagem-usuario">
+                <div class="circle">
+
+
+
+                    @if(Auth::user()->imagem == null)
+                        
+                            <img src="{{ asset('storage/users/perfil.png') }}" class="imagem-usuario">
+                        
+                    @else
+                        
+                            <img src="{{ asset('storage/users/'.auth()->user()->imagem) }}" class="imagem-usuario">
+
+                       
+                    @endif
+
+                   
+
+
                     </div>
-                @else
-                    <div class="circle">
-                        <img src="{{ asset('storage/users/'.auth()->user()->imagem) }}" class="imagem-usuario">
+                        
+
+                         <div class="dados-perfil tooltiptext">
+                            
+                                
+                                    @if(Auth::user()->imagem != null)
+                                        <img  height="150"  src="{{ asset('storage/users/'.auth()->user()->imagem) }}" class="">
+                                     @else
+                                        <img   height="150" src="{{ asset('storage/users/perfil.png') }}" class="">
+                                    @endif
+
+                                    <a class="aw-sair" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i> Sair</a>
+
+                                
+                            
+                        <div class="col-sm-12">
+                            Email: {{Auth::user()->email}}
+                        </div>
+
+                        
                     </div>
-                @endif
+
+
+                    
+
+
             
             </span>
 
@@ -113,7 +190,11 @@
     <section class="aw-content  js-content">
 
 
-
+        <div class="bread-crumbs">
+            Você está aqui: 
+            @yield('bread-crumbs')
+        </div>
+        <hr>
        
         @yield('content')
 

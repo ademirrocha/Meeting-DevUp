@@ -104,7 +104,11 @@ class MailMessage extends SimpleMessage
     public function markdown($view, array $data = [])
     {
         $this->markdown = $view;
+
+
         $this->viewData = $data;
+
+        
 
         $this->view = null;
 

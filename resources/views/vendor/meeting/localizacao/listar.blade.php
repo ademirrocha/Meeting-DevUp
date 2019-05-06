@@ -2,7 +2,10 @@
 
 @section('content')
     <div class="container-fluid">
-    
+        @section('bread-crumbs')
+          <a href="{{url('home')}}">Página Inicial</a>/
+          <a href="{{url('locais')}}">Locais de Reuniões</a>
+        @endsection
         <h3>Lista de Locais de Reuniões</h3>
         <div class="col-sm-12 form-group ">
             <a class="btn  btn-primary" href="{{route('locais/cadastrar')}}" >Cadastrar Novo Local</a>

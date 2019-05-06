@@ -2,8 +2,11 @@
 
 @section('content')
     <div class="container-fluid">
-
-
+        
+        @section('bread-crumbs')
+            <a href="{{url('home')}}">Página Inicial</a>/
+            <a href="{{url('reunioes')}}">Gerenciar Reuniões</a>
+        @endsection
     
         <h3>Listagem de Reunioes</h3>
         <div class="col-sm-12 form-group ">

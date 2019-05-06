@@ -50,7 +50,7 @@ INSERT INTO `cargos` (`id`, `cargo`, `created_at`, `updated_at`) VALUES
 INSERT INTO `users` (`id`, `organizacao_id`, `organizacao_confirmed`, `cargo_id`, `nome`, `email`, `cpf`, `telefone`, `sexo`, `email_verified_at`, `password`, `imagem`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 2, 1, 2, 'Admin do Meeting', 'admin@meeting.com', '00000000000', NULL, NULL, NULL, '$2y$10$/8STTlB6JCm4wx5IojsrI.N.EDjW5rZH6gwanEgYJr34daM5oPx5K', NULL, NULL, '2019-04-29 03:53:37', '2019-04-29 03:53:37'),
 (2, 3, 1, 2, 'Ademir Rocha', 'tiademir.rocha93@gmail.com', '00000000000', NULL, NULL, NULL, '$2y$10$GNEczMBu0sYq21BGsYeTZ..BGFxOap5kXlSDuCs/KEAud5TQavlNm', NULL, NULL, '2019-04-29 03:53:37', '2019-04-29 03:53:37');
-COMMIT;
+
 
 
 --

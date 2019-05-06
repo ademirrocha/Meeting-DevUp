@@ -28,6 +28,9 @@ Route::group(['middleware', ['auth'], 'namespace' => 'Usuarios'], function(){
 	Route::POST('locais/cadastro', 'UsuariosController@cadastrarLocalizacao')->name('locais/cadastro');
 
 
+	Route::get('notificacoes/{id}/view', 'UsuariosController@showNotificacao')->name('notificacoes/{id}/view');
+
+
 
 });
 

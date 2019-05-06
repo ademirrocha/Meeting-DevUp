@@ -10,9 +10,11 @@
 
 @section('content')
 
-	<br>
-
  	<div class="container-fluid">
+    @section('bread-crumbs')
+      <a href="{{url('home')}}">Página Inicial</a>
+    @endsection
+
     <div class="row">
       
       <section class="content left">

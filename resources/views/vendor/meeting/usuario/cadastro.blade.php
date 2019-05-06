@@ -5,9 +5,12 @@
 
     <div class="container-fluid">
         
-            
-            
-            @auth
+        @auth
+        @section('bread-crumbs')
+            <a href="{{url('home')}}">Página Inicial</a>/
+            <a href="{{url('acount')}}">Minha Conta</a>
+        @endsection
+
                 <form method="post" action="{{route('acount/edit')}}" enctype="multipart/form-data">
                 <h3>Editar Dados do Usuário</h3>
             

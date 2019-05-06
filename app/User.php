@@ -13,11 +13,15 @@ use App\Models\Permissoes\Role;
 use App\Models\Organizacao;
 use App\Models\Cargo;
 
+use App\Notifications\meetingNotify;
+
 use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
     use Notifiable;
+
+    
 
     
 

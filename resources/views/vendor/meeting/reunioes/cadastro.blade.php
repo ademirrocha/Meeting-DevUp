@@ -5,16 +5,19 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     
-                
-    
-
-    
 
 @endsection
 
 @section('content')
 
     <div class="container-fluid">
+        @section('bread-crumbs')
+            <a href="{{url('home')}}">Página Inicial</a>/
+            <a href="{{url('reunioes')}}">Gerenciar Reuniões</a>/
+            <a href="{{url('reunioes/cadastrar')}}">Agendar Reunião</a>
+        @endsection    
+
+            
         @if(isset($pessoas))
             <h3>Editar Reunião </h3>
             <form id="formulario" action="{{ route('reunioes/editar') }}"  method="post">

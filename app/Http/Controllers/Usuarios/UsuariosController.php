@@ -13,6 +13,8 @@ use App\Models\Localizacao;
 use App\Models\Cargo;
 use App\User;
 
+use App\Notifications\meetingNotify;
+
 use Illuminate\Support\Facades\DB;
 
 
@@ -36,6 +38,34 @@ class UsuariosController extends Controller
 
         return view("vendor.meeting.usuario.cadastro");
         
+    }
+
+
+    public function showNotificacao($id){
+
+        $notificacao = meetingNotify::find($id);
+
+        if($notificacao->user_id != auth()->user()->id){
+            return redirect()->back();
+        }
+
+
+        $objeto = DB::table($notificacao->table_references)->find($notificacao->table_references_id);
+
+        $rota = '';
+        $textAction = '';
+        if($notificacao->table_references == 'reunioes'){
+
+           $rota = 'reuniao/'.$notificacao->table_references_id.'/view';
+           $textAction = 'Ver Reunião';
+        }
+
+
+        $notificacao->read = 1;
+        $notificacao->save();
+
+        return view('vendor.meeting.usuario.notificacoes', compact('notificacao', 'rota', 'textAction'));
+
     }
 
     
@@ -143,7 +173,11 @@ class UsuariosController extends Controller
 
        $permissoes = auth()->user()->rolesUser();
 
-        $usuarios = User::where('organizacao_id', auth()->user()->organizacao_id)->get();
+       if($permissoes[0]->nome == 'admin' || $permissoes[0]->nome == 'super_admin'){
+            $usuarios = User::where('organizacao_id', auth()->user()->organizacao_id)->orderBy('nome', 'asc')->get();
+       }else{
+            $usuarios = User::where('id', auth()->user()->id)->get();
+       }
 
         return view("vendor.meeting.usuario.listar", compact('usuarios', 'permissoes'));
     }
