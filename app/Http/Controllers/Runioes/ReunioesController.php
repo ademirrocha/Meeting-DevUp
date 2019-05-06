@@ -205,7 +205,7 @@ class ReunioesController extends Controller
                 return view('vendor.meeting.reunioes.cadastro', compact('reuniao', 'pessoas', 'localizacoes', 'funcionarios', 'pautas'));
 
             }else{
-                return view('vendor.meeting.reunioes.reuniao', compact('reuniao', 'pessoas'));
+                return view('vendor.meeting.reunioes.reuniao', compact('reuniao', 'pessoas', 'pautas'));
             }
             
 
@@ -427,6 +427,12 @@ class ReunioesController extends Controller
                 return redirect()->back();
             }
 
+
+
+            $pautas = Reunioes::pautas($reuniao->id);
+
+            $pessoas = UsersReuniao::where('reuniao_id', $reuniao->id)->get();
+
             if($reuniao->user_id == auth()->user()->id){
 
                 if( ! Ata::where('reuniao_id', $id)->exists()){
@@ -437,14 +443,12 @@ class ReunioesController extends Controller
 
                 //$ata = $reuniao->ata;
 
-                $pautas = Reunioes::pautas($reuniao->id);
-
-                $pessoas = UsersReuniao::where('reuniao_id', $reuniao->id)->get();
+                
 
                
                 return view('vendor.meeting.reunioes.ata-edite', compact('reuniao', 'pautas', 'pessoas'));
             }else{
-                return view('vendor.meeting.reunioes.ata', compact('reuniao'));
+                return view('vendor.meeting.reunioes.ata', compact('reuniao', 'pautas', 'pessoas'));
             }
 
         

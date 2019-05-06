@@ -3,7 +3,11 @@
 @section('content')
 
 <div class="container-fluid">
-
+    @section('bread-crumbs')
+        <a href="{{url('home')}}">Página Inicial</a>/
+        <a href="{{url('reunioes')}}">Gerenciar Reuniões</a>/
+        <a href="{{url("reuniao/$reuniao->id/view")}}">Ver Reunião</a>
+    @endsection  
 
     <h3>Reunião: {{$reuniao->title}}</h3>
     
