@@ -116,3 +116,12 @@
     max-height: 100%;
     overflow: auto;
 }
+
+
+.time{
+    float: right;
+}
+
+.time .time-end{
+    font-size: 2rem;
+}

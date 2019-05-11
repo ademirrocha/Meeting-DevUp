@@ -11,11 +11,34 @@
         <a href="{{url('reunioes')}}">Gerenciar Reuniões</a>/
         <a href="{{url("reuniao/$reuniao->id/ata")}}">Editar Ata da Reunião</a>
     @endsection
+
+    <input type="hidden" id="data_fim" value="{{$reuniao->data_fim}}">
+    <input type="hidden" id="data-now" value="{{date('Y-m-d')}}">
+    <input type="hidden" id="hora-now" value="{{date('H:i', strtotime('+10 minute', strtotime(date('H:i'))))}}">
+
+    <div class="time form-group">
+    	<label  class="control-label">
+    		<span class="label-time">Tempo Restante:</span>
+    		
+    	</label>
+
+    	<div class="time-end">
+    		<span id="dias">00</span>
+    		<span id="horas">00</span>:<span  id="minutos">00</span>:<span  id="segundos">00</span>
+    	</div>
+    	<div>
+    		<button style="display: none;" type="submit" class="btn btn-primary btnAdiarEncerramento" onclick="adiarEncerramento(`{{url("reuniao/$reuniao->id/adiar-encerramento")}}`);" >Adiar Encerramento</button>
+    	</div>
+
+
+    </div>
+
+    
 	
 	<h3>Reunião: {{$reuniao->title}}</h3>
 	<div>
     	Data de Inicio: {{$reuniao->data_inicio}}<br>
-    	Data de Término: {{$reuniao->data_fim}}<br>
+    	Data de Encerramento: {{$reuniao->data_fim}}<br>
     	Facilitador: {{App\User::find($reuniao->user_id)->nome}}<br>
     </div>
     <hr>
@@ -30,8 +53,9 @@
 		        	<button type="submit" class="btn btn-warning " > Suspender Reunião </button> 
 
 		        	<button type="submit" class="btn btn-danger " > Cancelar Reunião </button> 
-
-		        	<button type="submit" class="btn btn-success " > Encerrar Reunião </button>
+		        	@if(! $reuniao->encerrada )
+		        		<button  type="submit" class="btn btn-success " > Encerrar Reunião </button>
+		        	@endif
 		        	
 		        </div>
 	        
@@ -42,16 +66,21 @@
 
 		        <div class="row">
 			    <div class="col-sm-6 form-group">
-	        	<form id="form-ata" action="{{url("reuniao/$reuniao->id/ata/salvar")}}"  method="post">
+	        	
+        		<form id="form-ata" action="{{url("reuniao/$reuniao->id/ata/salvar")}}"  method="post">
 
-	    			@csrf
+	    			<input id="token_page" type="hidden" name="_token" value="{{csrf_token()}}">
+
 
 		        	
 		        	
 
 		        		
-	    			
-		        		<textarea rows="20", cols="80" id="ata" name="ata" style="resize: none; " placeholder="Digite a Ata da Reunião Aqui..." onkeyUp="ataDigit();" onkeyDown="ataDigit();">{{$reuniao->ata->ata}}</textarea>
+	    			@if($reuniao->data_fim > date('Y-m-d H:i:s') )
+		        		<textarea rows="20", cols="80" id="ata" name="ata" style="resize: none; " placeholder="Digite a Ata da Reunião Aqui..." onkeyUp="ataDigit();" onkeyDown="ataDigit();">{{$reuniao->ata->ata ?? 'A Ata Não Foi Redigida...'}}</textarea>
+		        	@else
+		        		<textarea rows="20", cols="80"  id="ata" name="ata" style="resize: none; " readonly="readonly">{{$reuniao->ata->ata ?? 'A Ata Não Foi Redigida...'}}</textarea>
+		        	@endif
 		        	
 		        	
 		        		
@@ -86,8 +115,9 @@
 
 		        		 <label class="col-sm-12 form-group  point p_10">
                                                 
+                                                
+                                                <input id="fun_{{$user->id}}" name="participantes[]" type="checkbox" class="" value="{{$user->id}}"/> 
                                                 {{$user->nome}}
-                                                <input id="fun_{{$user->id}}" name="participantes[]" type="checkbox" class="" value="{{$user->id}}"/>
 
                                             </label>
 		        		<hr>

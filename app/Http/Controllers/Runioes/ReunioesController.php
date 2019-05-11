@@ -43,8 +43,6 @@ class ReunioesController extends Controller
 
     public function cadastrarReuniao(Request $request){
 
-
-
     	$dataIni = ($request->data_ini. ' '. $request->hora_ini.':00');
     	$dataFim = ($request->data_fim. ' '. $request->hora_fim.':00');
 
@@ -118,6 +116,7 @@ class ReunioesController extends Controller
             $create = UsersReuniao::create([
                 'reuniao_id' => $order,
                 'user_id' => auth()->user()->id,
+                'confimou_presenca' => 1,
                 
                 ]);
 
@@ -190,7 +189,7 @@ class ReunioesController extends Controller
             $pautas = Reunioes::pautas($reuniao->id);
 
             
-             if($reuniao->data_inicio < date('Y-m-d H:i:s') && $reuniao->data_fim > date('Y-m-d H:i:s')){
+             if($reuniao->data_inicio < date('Y-m-d H:i:s') ){
                     return redirect("reuniao/$reuniao->id/ata");
                 }
 
@@ -609,6 +608,41 @@ class ReunioesController extends Controller
                 'table_references_id' => $reuniao->id,
             ]);
         }
+    }
+
+
+    public function adiarEncerramento($id, Request $request){
+        $reuniao = Reunioes::find($id);
+
+        if($reuniao->organizacao_id != auth()->user()->organizacao_id || $reuniao->encerrada){
+            return redirect()->back();
+        }
+
+        $dataFim = ($request->data_fim. ' '. $request->hora_fim.':00');
+
+
+        $reuniao->data_fim = $dataFim;
+        $reuniao->save();
+
+
+        return redirect()->back();
+        
+    }
+
+
+    public function buscaAutoAta($request){
+
+        $reuniao = Reunioes::with('ata')->find($request);
+
+
+        if($reuniao->organizacao_id != auth()->user()->organizacao_id ){
+            return redirect()->back();
+        }
+
+        return  ($reuniao); 
+
+        
+
     }
 
 

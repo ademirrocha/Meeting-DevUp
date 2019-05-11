@@ -22,7 +22,7 @@ class CreateReunioesTable extends Migration
             $table->string('title', 191);
             $table->dateTime('data_inicio');
             $table->dateTime('data_fim');
-            
+            $table->boolean('encerrada')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

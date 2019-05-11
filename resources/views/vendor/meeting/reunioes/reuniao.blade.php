@@ -18,6 +18,7 @@
     </div>
     <br><br>
 
+
      <div class="row">
         <div class="col-sm-12 form-group">
 
@@ -87,14 +88,18 @@
                                         @if($user->id == auth()->user()->id)
                                             @if(! $pessoa->confimou_presenca)
 
+
                                                     <a href="{{url("reuniao/$reuniao->id/confirmar_presenca/$user->id/confirm")}}" class="btn  btn-default btn-xs" href="#" alt="Clique para confirmar sua presença nessa reunião" title="Clique para confirmar sua presença nessa reunião">
                                                         <i class="fas fa-clipboard-check"></i>
                                                     </a>
 
                                             @else
-                                                <a style="color: red;" class="btn  btn-default btn-xs" href="#" alt="Clique para cancelar sua presença nessa reunião" title="Clique para cancelar sua presença nessa reunião">
-                                                    <i class="fas fa-window-close"></i>
-                                                </a>
+                                                
+                                                    <a style="color: red;" class="btn  btn-default btn-xs" href="#" alt="Clique para cancelar sua presença nessa reunião" title="Clique para cancelar sua presença nessa reunião">
+                                                        <i class="fas fa-window-close"></i>
+                                                    </a>
+                                               
+
                                             @endif
 
 

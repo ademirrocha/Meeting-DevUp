@@ -118,9 +118,9 @@
 
                 
                 <div class="col-sm-6 form-group">
-                    <label for="data_fim"  class="control-label">Data de Témino</label>
+                    <label for="data_fim"  class="control-label">Data de Encerramento</label>
                     <input id="data_fim" value="{{date('Y-m-d', strtotime($reuniao->data_fim  ?? date('Y-m-d')))}}" name="data_fim" type="date" class="form-control" required/>
-                    <label for="hora_fim"  class="control-label">Hora de Témino</label>
+                    <label for="hora_fim"  class="control-label">Hora de Encerramento</label>
                     <input id="hora_fim" name="hora_fim" type="time" class="form-control" value="{{date('H:i', strtotime($reuniao->data_fim ?? date('H:i', strtotime('+35 minute', strtotime(date('H:i'))))))}}" required/>
                 </div>
 

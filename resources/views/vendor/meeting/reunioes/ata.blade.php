@@ -12,11 +12,31 @@
         <a href="{{url('reunioes')}}">Gerenciar Reuniões</a>/
         <a href="{{url("reuniao/$reuniao->id/ata")}}">Ver Ata da Reunião</a>
     @endsection
+
+    <input type="hidden" id="data_fim" value="{{$reuniao->data_fim}}">
+
+
+    
+
+    <div class="time form-group">
+    	<label  class="control-label">
+    		<span class="label-time">Tempo Restante:</span>
+    		
+    	</label>
+
+    	<div class="time-end">
+    		<span id="dias">00</span>
+    		<span id="horas">00</span>:<span  id="minutos">00</span>:<span  id="segundos">00</span>
+    	</div>
+    	
+
+
+    </div>
 	
 	<h3>Reunião: {{$reuniao->title}}</h3>
 	<div>
     	Data de Inicio: {{$reuniao->data_inicio}}<br>
-    	Data de Término: {{$reuniao->data_fim}}<br>
+    	Data de Encerramento: <span id="hora_encerrar">{{$reuniao->data_fim}}</span><br>
     	Facilitador: {{App\User::find($reuniao->user_id)->nome}}<br>
     </div>
     <hr>
@@ -29,9 +49,11 @@
 		        <div class="row">
 			    <div class="col-sm-6 form-group">
 	        	
-
+			    	<form id="form-ata" action="{{url("reuniao/$reuniao->id/buscarAta")}}"> 
 	    			
-		        		<textarea id="div-ata" name="ata" style="resize: none; " readonly="readonly">{{$reuniao->ata->ata}}</textarea>
+		        		<textarea rows="20", cols="80" id="div-ata" name="ata" style="resize: none; " readonly="readonly">{{$reuniao->ata->ata ?? 'A Ata Não Foi Redigida...'}}</textarea>
+
+		        	</form>
 		        	
 		        	
 	        	</div>
@@ -69,5 +91,12 @@
 	    
     
 </div>
+
+@endsection
+
+
+@section('js')
+
+<script  src="{{asset('vendor/meeting/javascripts/script-ata-convidado.js')}}"></script>
 
 @endsection
