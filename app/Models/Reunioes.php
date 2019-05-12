@@ -60,4 +60,9 @@ class Reunioes extends Model
         return $this->hasOne(Ata::class, 'reuniao_id');
     }
 
+
+    public function participantes(){
+        return $this->hasMany(UsersReuniao::class, 'reuniao_id');
+    }
+
 }

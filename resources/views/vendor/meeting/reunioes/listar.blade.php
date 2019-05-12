@@ -8,7 +8,7 @@
             <a href="{{url('reunioes')}}">Gerenciar Reuniões</a>
         @endsection
     
-        <h3>Listagem de Reunioes</h3>
+        <h3>Lista de Reuniões</h3>
         <div class="col-sm-12 form-group ">
             <a class="btn  btn-primary" href="{{route('reunioes/cadastrar')}}" >Nova Reuniao</a>
         </div>

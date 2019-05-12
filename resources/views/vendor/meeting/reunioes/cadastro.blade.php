@@ -33,16 +33,41 @@
             <div class="row">
                 <div class="col-sm-12 form-group">
 
-                    @if(session('error'))
+                    @if(session('error') || session('you_in_convocacao') || session('usuarios_em_outra_reuniao') || session('you_in_convite') || session('having_outras_reunioes') )
                         <div class="session-error col-sm-12" role="alert">
-                            <strong>{{ session('error') }}</strong>
+
+                            @if(session('error'))
+                                <strong>{{ session('error') }}</strong>
+                            @endif
+
+                            @if(session('you_in_convocacao'))
+                                <strong>{{ session('you_in_convocacao') }}</strong>
+                            @endif
+
+                            @if(session('usuarios_em_outra_reuniao'))
+                                <strong>{{ session('usuarios_em_outra_reuniao') }}</strong>
+                                
+                            @endif
+
+                            @if(session('you_in_convite'))
+                                <strong>{{ session('you_in_convite') }}</strong>
+                            @endif
+
+                            @if(session('having_outras_reunioes'))
+                                <strong>{{ session('having_outras_reunioes') }}</strong>
+                            @endif
+
                         </div>
-                    @endif
-                     @if(session('sucesso'))
-                        <div class="session-sucess col-sm-12" role="alert">
-                            <strong>{{ session('sucesso') }}</strong>
-                        </div>
-                    @endif
+                        @endif
+
+                        @if(session('sucesso'))
+                            <div class="session-sucess col-sm-12" role="alert">
+                                @if(session('sucesso'))
+                                    <strong>{{ session('sucesso') }}</strong>
+                                @endif
+                            </div>
+                        @endif
+
                 </div>
             </div>
             
@@ -52,7 +77,7 @@
             <div class="row">
                 <div class="col-sm-6 form-group">
                     <label for="pauta"  class="control-label">Título da Reunião</label>
-                    <input id="pauta" name="title" type="text" class="form-control" value="{{$reuniao->title ?? old('pauta')}}" required autocomplete="title" autofocus placeholder="Digite o Título da Reunião" />
+                    <input id="pauta" name="title" type="text" class="form-control" value="{{$reuniao->title ?? old('title')}}" required autocomplete="title" autofocus placeholder="Digite o Título da Reunião" />
                 </div>
 
                 <div class="col-sm-6 form-group">
