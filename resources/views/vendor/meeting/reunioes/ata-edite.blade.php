@@ -64,20 +64,21 @@
 		        	<label class="control-label" id="situacao"></label>
 		        </div>
 
+		        <form id="form-ata" action="{{url("reuniao/$reuniao->id/ata/salvar")}}"  method="post">
+
 		        <div class="row">
 			    <div class="col-sm-6 form-group">
 	        	
-        		<form id="form-ata" action="{{url("reuniao/$reuniao->id/ata/salvar")}}"  method="post">
+        		
 
 	    			<input id="token_page" type="hidden" name="_token" value="{{csrf_token()}}">
 
 
 		        	
-		        	
 
 		        		
 	    			@if($reuniao->data_fim > date('Y-m-d H:i:s') )
-		        		<textarea rows="20", cols="80" id="ata" name="ata" style="resize: none; " placeholder="Digite a Ata da Reunião Aqui..." onkeyUp="ataDigit();" onkeyDown="ataDigit();">{{$reuniao->ata->ata ?? 'A Ata Não Foi Redigida...'}}</textarea>
+		        		<textarea rows="20", cols="80" id="ata" name="ata" style="resize: none; " placeholder="Digite a Ata da Reunião Aqui..." onkeyUp="ataDigit();" onkeyDown="ataDigit();">{{$reuniao->ata->ata ?? ''}}</textarea>
 		        	@else
 		        		<textarea rows="20", cols="80"  id="ata" name="ata" style="resize: none; " readonly="readonly">{{$reuniao->ata->ata ?? 'A Ata Não Foi Redigida...'}}</textarea>
 		        	@endif
@@ -89,7 +90,7 @@
 	               
 
 	                
-                </form>
+                
                 	
 	        	</div>
 	        	<div class="col-sm-3 form-group">
@@ -111,15 +112,20 @@
 
 		        	<?php $user = App\User::find($pessoa->user_id); ?>
 
+
 		        		
+					@if($pessoa->presente)
+						<label id="pessoa_{{$pessoa->id}}" class="col-sm-12 form-group  point p_10" onclick="atualiza();" >     
+                        	<input id="fun_{{$user->id}}" name="participantes[]" type="checkbox"  value="{{$user->id}}" checked/> {{$pessoa->usuario->nome}}
+                        </label>
+                    @else
+                    	<label id="pessoa_{{$pessoa->id}}" class="col-sm-12 form-group  point p_10" onclick="atualiza();"  >
+                        	<input id="fun_{{$user->id}}" name="participantes[]" type="checkbox" onclick="atualiza();"   value="{{$user->id}}"  />{{$pessoa->usuario->nome}}
+                        </label>
+                    @endif
+                     	
 
-		        		 <label class="col-sm-12 form-group  point p_10">
-                                                
-                                                
-                                                <input id="fun_{{$user->id}}" name="participantes[]" type="checkbox" class="" value="{{$user->id}}"/> 
-                                                {{$user->nome}}
-
-                                            </label>
+                    
 		        		<hr>
 		        	@endforeach
 		        </div>
@@ -127,6 +133,8 @@
 		       
 	        	
 	        </div>
+
+	    </form>
 	    
     
 </div>

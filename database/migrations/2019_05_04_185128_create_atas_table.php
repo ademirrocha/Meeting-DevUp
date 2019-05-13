@@ -18,6 +18,7 @@ class CreateAtasTable extends Migration
             $table->bigInteger('reuniao_id')->unsigned()->default(1);
             
             $table->longText('ata')->nullable();
+            $table->boolean('finalizada')->default(0);
             $table->timestamps();
 
             $table->foreign('reuniao_id')->references('id')->on('reunioes')->onDelete('cascade');

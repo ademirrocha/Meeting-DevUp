@@ -470,10 +470,29 @@ class ReunioesController extends Controller
 
             $pautas = Reunioes::pautas($reuniao->id);
 
+            $presente = false;
+
+            foreach ($pessoas as  $pessoa) {
+                if($pessoa->presente && $pessoa->user_id == auth()->user()->id){
+                    $presente = true;
+                }
+            }
+
+            if( $reuniao->user_id == auth()->user()->id){
+                $presente = true;
+
+                $ru = UsersReuniao::where('reuniao_id', $reuniao->id)->where('user_id', auth()->user()->id )->get();
+                $ru[0]->presente = 1;
+                $ru[0]->save();
+
+            }
             
-             if($reuniao->data_inicio < date('Y-m-d H:i:s') ){
+
+             if($reuniao->data_inicio < date('Y-m-d H:i:s') && $presente ){
                     return redirect("reuniao/$reuniao->id/ata");
                 }
+
+
 
 
 
@@ -775,7 +794,12 @@ class ReunioesController extends Controller
 
             $pautas = Reunioes::pautas($reuniao->id);
 
-            $pessoas = UsersReuniao::where('reuniao_id', $reuniao->id)->get();
+            $pessoas = UsersReuniao::where('reuniao_id', $reuniao->id)
+                ->join('users', 'users.id', '=', 'users_reuniao.user_id')
+                ->orderBy('users.nome', 'asc')
+                    ->get();
+
+
 
             if($reuniao->user_id == auth()->user()->id){
 
@@ -792,7 +816,15 @@ class ReunioesController extends Controller
                
                 return view('vendor.meeting.reunioes.ata-edite', compact('reuniao', 'pautas', 'pessoas'));
             }else{
+
+                foreach ($pessoas as  $pessoa) {
+                    if( ! $pessoa->presente && $pessoa->user_id == auth()->user()->id){
+                        return redirect("reuniao/$reuniao->id/view");
+                    }
+                }
+
                 return view('vendor.meeting.reunioes.ata', compact('reuniao', 'pautas', 'pessoas'));
+
             }
 
         
@@ -829,10 +861,52 @@ class ReunioesController extends Controller
 
         $reuniao = Reunioes::find($id);
 
+        if($reuniao->user_id == auth()->user()->id){
+
+            if($request->participantes != null){
+
+                $user_reuniao = UsersReuniao::where('reuniao_id', $id)->get();
+
+
+            
+                foreach($request->participantes as $participante){
+
+                    foreach ($user_reuniao as $user) {
+
+                        if($participante == $user->user_id){
+                            if($user->presente == 0){
+                                $user->presente = 1;
+                                $user->save();
+                            }
+                            
+                        }
+                    }
+
+                    
+                }
+
+                foreach ($user_reuniao as $user) {
+                    $continua = false;
+                    foreach($request->participantes as $participante){
+                        if($user->user_id ==  $participante){
+                            $continua = true;
+                        }
+                    }
+
+                    if( ! $continua){
+                        $user->presente = 0;
+                        $user->save();
+                    }
+                }
+
+
+            }
+        
+            
         
         
 
-        if($reuniao->user_id == auth()->user()->id){
+        
 
             $ata = Ata::where('reuniao_id', $id)->get();
 
@@ -927,6 +1001,7 @@ class ReunioesController extends Controller
         $reuniao->save();
 
 
+
         return redirect()->back();
         
     }
@@ -936,12 +1011,21 @@ class ReunioesController extends Controller
 
         $reuniao = Reunioes::with('ata')->find($request);
 
+        $user = UsersReuniao::where('reuniao_id', $reuniao->id)->where('user_id', auth()->user()->id)->get();
+
+
+
 
         if($reuniao->organizacao_id != auth()->user()->organizacao_id ){
             return redirect()->back();
         }
 
-        return  ($reuniao); 
+
+         if( $user[0]->presente ){
+            return  ($reuniao); 
+        }
+
+        return false;
 
         
 

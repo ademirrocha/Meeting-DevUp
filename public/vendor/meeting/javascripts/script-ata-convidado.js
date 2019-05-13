@@ -20,6 +20,8 @@ function reload(id){
                         data: dados,
                         success: function( data )
                         {
+
+                            
                                 var strBuilder = [];
                                 ata = '';
                                 data_final = '';

@@ -50,6 +50,8 @@
 			    <div class="col-sm-6 form-group">
 	        	
 			    	<form id="form-ata" action="{{url("reuniao/$reuniao->id/buscarAta")}}"> 
+
+			    		<button type="submit">clique </button>
 	    			
 		        		<textarea rows="20", cols="80" id="div-ata" name="ata" style="resize: none; " readonly="readonly">{{$reuniao->ata->ata ?? 'A Ata Não Foi Redigida...'}}</textarea>
 
@@ -70,18 +72,16 @@
 		        </div>
 
 		        <div class="col-sm-3 form-group">
-		        	Lista Pessoas Presentes:<br><br>
+		        	Pessoas Presentes:<br><br>
 		        	<hr>
 		        	@foreach($pessoas as $pessoa)
+		        		@if($pessoa->presente)
+			        		<label class="col-sm-12 form-group  point p_10">                    
+	                            {{$pessoa->usuario->nome}}
+	                        </label>
+			        		<hr>
+		        		@endif
 
-		        	<?php $user = App\User::find($pessoa->user_id); ?>
-
-		        		
-
-		        		 <label class="col-sm-12 form-group  point p_10">                    
-                            {{$user->nome}}
-                        </label>
-		        		<hr>
 		        	@endforeach
 		        </div>
 
