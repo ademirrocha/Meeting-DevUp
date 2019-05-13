@@ -87,56 +87,12 @@ class ReunioesController extends Controller
         $existsReunioes = $this->reunioesExistentes($request);
 
         
-        $facilitadorInConvocacao = false;
-        $facilitadorInConvite = false;
-        $facilitadorPossuiReunião = false;
+        $inReuniao = $this->inReuniaoExistente($existsReunioes, null);
 
-
-       
-
-        if(count($existsReunioes) >= 1){
-
-            
-
-
-            foreach ($existsReunioes as $key => $value) { 
-
-                if($value->user_id == auth()->user()->id){
-                    $facilitadorPossuiReunião = true;
-                }
-                
-                foreach ($value->participantes as $participante) {
-                    if($participante->user_id == auth()->user()->id){
-                        if($value->tipo == 'Convocação Geral' || $value->tipo == 'Convocação'){
-                            $facilitadorInConvocacao = true;
-                        }else{
-                            $facilitadorInConvite = true;
-                        }
-                    }
-                }
-
-
-
-
-               if($value->tipo == 'Convocação Geral'){
-
-                    return redirect()->back()->with('error', 'Não foi possível agendar a reunião. Pois já existe uma reunião do tipo Convocação Geral nesse mesmo horário!');
-                }else{
-
-                    $this->solicitarMudancaHorario($request);
-                    if($value->tipo == 'Convocação Geral' && $value->tipo == 'Convocação' ){
-                        $msgs['having_outras_reunioes'] =  'Havia outras reuniões marcadas para este horário, mas foi solicitado a mudança do horário!';
-                    }
-                    
-                }
-
-
-
-
-
-
-            }
-        }
+        $facilitadorInConvocacao = $inReuniao['facilitadorInConvocacao'];
+        $facilitadorInConvite = $inReuniao['facilitadorInConvite'];
+        $facilitadorPossuiReunião = $inReuniao['facilitadorPossuiReunião'];
+        
 
         
 
@@ -276,7 +232,7 @@ class ReunioesController extends Controller
 
                     if($request->tipo == 'Convocação Geral' || ($request->tipo == 'Convocação' && ($reuniao->tipo == 'Convite' || $reuniao->tipo == 'Convite Geral') ) ){
 
-                        $usuarios_em_outra_reuniao = 'Há usuário que não foi adicionado, porque já estava participando de outra reunião!';
+                        $msgs['usuarios_em_outra_reuniao'] = 'Há usuário que não foi adicionado, porque já estava participando de outra reunião!';
                     }
 
                     
@@ -316,6 +272,16 @@ class ReunioesController extends Controller
                 
                 ]);
 
+
+
+            if($request->tipo == 'Convocação Geral' && count($existsReunioes) >= 1){
+
+                $this->solicitarMudancaHorario($request);
+
+                $msgs['having_outras_reunioes'] =  'Havia outras reuniões marcadas para este horário, mas foi solicitado a mudança do horário!';
+                        
+            }
+
                 
 
         
@@ -326,7 +292,162 @@ class ReunioesController extends Controller
             return redirect()->back()->with('sucesso', 'Reunião agendada com sucesso.')->with($msgs);
 
         
+    }
 
+
+    public function userInReuniao($existsReunioes, $reuniao = null, $participante){
+        $userConvocado = false;
+        $userConvocadoGeral = false;
+        $userConvidadoGeral = false;
+        $userConvidado = false;
+
+        $usuarios_deletados = '';
+
+
+
+        foreach ($existsReunioes as $usersReuniao) {
+
+            if($reuniao->id != $usersReuniao->id ){
+
+                foreach ($usersReuniao->participantes as  $particips) {
+
+
+
+                    if($reuniao->tipo == 'Convocação Geral'){
+                        $particips->delete();
+                        $usuarios_deletados = 'Há usuários que podem ter sido retirados, porque já estava participando de outra reunião!';
+                    }else if($reuniao->tipo == 'Convocação'){
+                        if($usersReuniao->tipo == 'Convite' || $usersReuniao->tipo == 'Convite Geral'){
+                            $particips->delete();
+
+                            $usuarios_deletados = 'Há usuários que podem ter sido retirados, pois já estava participando de outra reunião!';
+                        }
+                    }
+
+                    
+                    if($participante == $particips->user_id){
+                        if($usersReuniao->tipo == 'Convocação'){
+                            $userConvocado = true;
+                        }
+                        if($usersReuniao->tipo == 'Convocação Geral'){
+
+                            $userConvocadoGeral = true;
+                        }
+                        if($usersReuniao->tipo == 'Convite'){
+                            $userConvidado = true;
+                        }
+                        if($usersReuniao->tipo == 'Convite Geral'){
+                            $userConvidadoGeral = true;
+                        }
+                    }
+                    
+                }
+            }
+
+            
+
+        }
+
+
+         return ([
+            'userConvocado' => $userConvocado,
+            'userConvocadoGeral' => $userConvocadoGeral,
+            'userConvidadoGeral' => $userConvidadoGeral,
+            'userConvidado' => $userConvidado,
+            'usuarios_deletados' => $usuarios_deletados,
+        ]);
+
+    }
+
+
+    public function inReuniaoExistente($existsReunioes, $reuniao = null){
+
+        
+
+        $facilitadorInConvocacao = false;
+        $facilitadorInConvite = false;
+        $facilitadorPossuiReunião = false;
+
+        if(count($existsReunioes) >= 1){
+
+            
+            foreach ($existsReunioes as $key => $value) { 
+                if($reuniao == null){
+
+                      if($value->user_id == auth()->user()->id){
+                            $facilitadorPossuiReunião = true;
+                        } 
+
+                          
+                        foreach ($value->participantes as $participante) {
+                            if($participante->user_id == auth()->user()->id){
+                                if($value->tipo == 'Convocação Geral' || $value->tipo == 'Convocação'){
+                                    $facilitadorInConvocacao = true;
+                                }else{
+                                    $facilitadorInConvite = true;
+                                }
+                            }
+                        }
+
+
+
+
+                       if($value->tipo == 'Convocação Geral'){
+
+                            
+                            
+                                return redirect()->back()->with('error', 'Não foi possível agendar a reunião. Pois já existe uma reunião do tipo Convocação Geral nesse mesmo horário!');
+                            
+                            
+
+                        
+
+                    }
+                }else{
+                    if($reuniao->id != $value->id ){
+
+                        if($value->user_id == auth()->user()->id){
+                            $facilitadorPossuiReunião = true;
+                        } 
+
+                          
+                        foreach ($value->participantes as $participante) {
+                            if($participante->user_id == auth()->user()->id){
+                                if($value->tipo == 'Convocação Geral' || $value->tipo == 'Convocação'){
+                                    $facilitadorInConvocacao = true;
+                                }else{
+                                    $facilitadorInConvite = true;
+                                }
+                            }
+                        }
+
+
+
+
+                       if($value->tipo == 'Convocação Geral'){
+
+                            
+                            
+                                return redirect()->back()->with('error', 'Não foi possível agendar a reunião. Pois já existe uma reunião do tipo Convocação Geral nesse mesmo horário!');
+                            
+                            
+
+                        }
+
+                    }
+
+                }
+
+
+            }
+        }
+
+
+        return ([
+            'facilitadorInConvocacao' => $facilitadorInConvocacao,
+            'facilitadorInConvite' => $facilitadorInConvite,
+            'facilitadorPossuiReunião' => $facilitadorPossuiReunião,
+        ]);
 
     }
 
@@ -375,44 +496,6 @@ class ReunioesController extends Controller
 
     }
 
-    public function adicionarPessoasNaReuniao(Request $request){
-
-        $reuniao = Reunioes::find($request->reuniao);
-
-
-
-
-        if($reuniao != null){
-            if($reuniao->organizacao_id != auth()->user()->organizacao_id){
-                return redirect()->back();
-            }
-
-
-            //return dd($reuniao->id);
-
-            foreach ($request->pessoa as $key => $p) {
-
-        
-
-            $create = UsersReuniao::create([
-                'reuniao_id' => $reuniao->id,
-                'user_id' => $p,
-                
-                
-                ]);
-
-
-            } 
-            
-         
-
-           return redirect()->route('reuniao');
-
-       }else{
-            return redirect()->back();
-       }
-   
-    }
 
     public function editarReuniao(Request $request){
 
@@ -434,7 +517,7 @@ class ReunioesController extends Controller
             
                 
 
-            if($dataIni >= $dataFim || $dataIni < date('Y-m-d H:s:i') || $request->localizacao == '' || $request->participantes == null || $request->pauta[0] == null){
+            if($dataIni >= $dataFim || $dataIni < date('Y-m-d H:s:i') || $request->localizacao == 'Selecione um local' || $request->participantes == null || $request->pauta[0] == null){
                 $erro = array();
 
                 if($dataIni >= $dataFim){
@@ -445,7 +528,7 @@ class ReunioesController extends Controller
                     $erro['data_error'] = 'A data de inicio e hora nao pode ser antes desse momento!';
                 }
 
-                if($request->localizacao == ''){
+                if($request->localizacao == 'Selecione um local'){
 
                     $erro['localizacao_error'] = 'Selecione uma Localizacao!';
                 }
@@ -468,6 +551,24 @@ class ReunioesController extends Controller
 
             }
 
+             $msgs = array();
+
+             $existsReunioes = $this->reunioesExistentes($request);
+
+        
+            $inReuniao = $this->inReuniaoExistente($existsReunioes, $reuniao);
+
+
+
+            $facilitadorInConvocacao = $inReuniao['facilitadorInConvocacao'];
+            $facilitadorInConvite = $inReuniao['facilitadorInConvite'];
+            $facilitadorPossuiReunião = $inReuniao['facilitadorPossuiReunião'];
+            
+
+        
+
+        if( ! $facilitadorInConvocacao && ! $facilitadorPossuiReunião ){
+        
 
             $reuniao->title = $request->title;
             $reuniao->tipo = $request->tipo;
@@ -475,108 +576,191 @@ class ReunioesController extends Controller
             $reuniao->data_inicio = $dataIni;
             $reuniao->data_fim = $dataFim;
 
-           
-            $create = $reuniao->save();
+            $saved = $reuniao->save();
 
-            
-
-            if($create){
-
-                $pessoas = UsersReuniao::where('reuniao_id', $reuniao->id)->get();
-
-                foreach ($pessoas as  $value) {
-                    if($value->user_id != auth()->user()->id){
-                        $continua = false;
-                        foreach ($request->participantes as  $p) {
-                            if($value->user_id == $p)
-                                $continua = true;
-                        }
-                        if($continua == false){
-                            UsersReuniao::where('reuniao_id', '=', $reuniao->id)->where('user_id', '=', $value->user_id)->delete();
-                        }
-                    }
-                }
-
-
-                
-                
-                foreach ($request->participantes as  $value) {
-
-                    
-
-                    if($value != auth()->user()->id){
-
-                         $pessoa = UsersReuniao::where('reuniao_id', $reuniao->id)->where('user_id', $value)->exists();
-
-                         if( ! $pessoa){
-                            $create = UsersReuniao::create([
-                            'reuniao_id' => $reuniao->id,
-                            'user_id' => $value,
-                            
-                            ]);
-                         }
-
-                    }
-                }
-
-
-                
-                
-                //Cadastra As Pautas
-
-
-                $pautas = DB::table('pautas')->where('reuniao_id', $reuniao->id)->get();
-
-                
-
-                foreach ($pautas as  $value) {
-
-                    foreach ($request->pauta as  $pauta) {
-                        $continua = false;
-                        if($value->nome == $pauta){
-                            $continua = true;
-                        }
-        
-                    }
-
-                    if($continua == false){
-                        DB::table('pautas')->where('reuniao_id', '=', $reuniao->id)->where('nome', '=', $value->nome)->delete();
-                    }
-                }
-                
-
-
-                foreach ($request->pauta as $key => $value) {
-
-                   
-
-                    $pauta = DB::table('pautas')->where('nome', $value)->where('reuniao_id', $reuniao->id)->exists();
-
-                    if(! $pauta){
-                        DB::table('pautas')->insert([
-                            ['reuniao_id' => $reuniao->id, 'nome' => $value]
-                        ]);
-                    }
-
-
-                }
-
-
-
-                    
-
-
-
-                return redirect()->back()->with('sucesso', 'Reunião atualizada com sucesso!');
-            }else{
-                return redirect()->back()->with('error', 'Não foi possível atualizar a reunião!');
-            }
 
         }else{
-            redirect()->back();
+            if($facilitadorInConvocacao)
+                $msgs['you_in_convocacao'] = ' Você estava convocado para outra reunião neste horário!';
+
+            if($facilitadorPossuiReunião)
+                $msgs['you_in_convocacao'] = ' Você já havia criado outra reunião para este horário!';
+
+            $msgs['having_outras_reunioes'] = '';
+
+            return redirect()->back()->with('error', 'Não foi possível salvar as alterações.')->with($msgs);
         }
 
+        
+
+        
+
+
+        $pessoas = UsersReuniao::where('reuniao_id', $reuniao->id)->get();
+
+        foreach ($pessoas as  $value) {
+
+            if($value->user_id != auth()->user()->id){
+                $continua = false;
+                foreach ($request->participantes as  $p) {
+                    if($value->user_id == $p)
+                        $continua = true;
+                }
+                if($continua == false){
+                    UsersReuniao::where('reuniao_id', '=', $reuniao->id)->where('user_id', '=', $value->user_id)->delete();
+                }
+            }
+        }
+
+        $confimou_presenca = 0;
+        if( $reuniao->tipo == 'Convocação' || $reuniao->tipo == 'Convocação Geral' ){
+            $confimou_presenca = 1;
+        }
+        
+        
+        foreach ($request->participantes as  $participante) {
+
+            if(count($existsReunioes) >= 1){
+
+
+                $userInReuniao = $this->userInReuniao($existsReunioes, $reuniao, $participante);
+
+               
+
+
+
+                $userConvocado = $userInReuniao['userConvocado'];
+                $userConvocadoGeral = $userInReuniao['userConvocadoGeral'];
+                $userConvidadoGeral = $userInReuniao['userConvidadoGeral'];
+                $userConvidado = $userInReuniao['userConvidado'];
+                
+                $usuarios_deletados = $userInReuniao['usuarios_deletados'];
+
+                if($usuarios_deletados != ''){
+                    $msgs['usuarios_deletados'] = $usuarios_deletados;
+                }
+
+                $in = UsersReuniao::where('user_id', $participante)->where('reuniao_id', $reuniao->id)->exists();
+
+                if( ! $userConvocado && ! $userConvocadoGeral && ! $userConvidadoGeral && ! $userConvidado ){
+                    if(! $in){
+                        $newConvite = UsersReuniao::create([
+                            'reuniao_id' => $reuniao->id,
+                            'user_id' => $participante,
+                            'confimou_presenca' => $confimou_presenca,
+                            
+                        ]);
+                    }
+                    
+
+                }else{
+
+                    $msgs['usuarios_em_outra_reuniao'] = "Alguns usuários podem não terem sido adicionados!";
+
+                    if($in){
+                        $delete = UsersReuniao::where('user_id', $participante)->where('reuniao_id', $reuniao->id)->delete();
+                        
+                            $msgs['usuarios_deletados'] = 'Há usuários que podem terem sido retirados, pois estavam em outra reunião!';
+                        
+                    }
+
+
+                    if($reuniao->tipo == 'Convocação' || $reuniao->tipo == 'Convocação Geral' ){
+
+                        if(! $inReuniao){
+                            $newConvite = UsersReuniao::create([
+                                'reuniao_id' => $reuniao->id,
+                                'user_id' => $participante,
+                                'confimou_presenca' => $confimou_presenca,
+                                
+                            ]);
+                        }
+
+                    
+
+                        
+                    }
+
+
+                }
+
+
+                
+
+                
+
+
+
+            }else{
+
+
+                $newConvite = UsersReuniao::create([
+                    'reuniao_id' => $reuniao->id,
+                    'user_id' => $participante,
+                    'confimou_presenca' => $confimou_presenca,
+                    
+                ]);
+
+            }
     }
+
+
+        
+        
+        //Cadastra As Pautas
+
+
+        $pautas = DB::table('pautas')->where('reuniao_id', $reuniao->id)->get();
+
+        
+
+        foreach ($pautas as  $value) {
+
+            foreach ($request->pauta as  $pauta) {
+                $continua = false;
+                if($value->nome == $pauta){
+                    $continua = true;
+                }
+
+            }
+
+            if($continua == false){
+                DB::table('pautas')->where('reuniao_id', '=', $reuniao->id)->where('nome', '=', $value->nome)->delete();
+            }
+        }
+        
+
+
+        foreach ($request->pauta as $key => $value) {
+
+           
+
+            $pauta = DB::table('pautas')->where('nome', $value)->where('reuniao_id', $reuniao->id)->exists();
+
+            if(! $pauta){
+                DB::table('pautas')->insert([
+                    ['reuniao_id' => $reuniao->id, 'nome' => $value]
+                ]);
+            }
+
+
+        }
+
+
+        if($saved){
+            return redirect()->back()->with('sucesso', 'Reunião atualizada com sucesso!')->with($msgs);
+    
+        }else{
+            return redirect()->back()->with('error', 'Não foi possível salvar as alterações!')->with($msgs);
+        }
+            
+
+
+    }
+        
+
+
+}
 
     public function showAta($id){
 
@@ -670,13 +854,19 @@ class ReunioesController extends Controller
 
     public function reunioesExistentes($request){
 
+
+
         $dataIni = ($request->data_ini. ' '. $request->hora_ini.':00');
         $dataFim = ($request->data_fim. ' '. $request->hora_fim.':00');
 
-        return Reunioes::with('participantes')->where('data_inicio', '>=', $dataIni)->where('data_fim', '<', $dataFim)
+            $reunioes = Reunioes::with('participantes')->where('data_inicio', '>=', $dataIni)->where('data_fim', '<', $dataFim)
                 ->orWhere('data_inicio', '>=', $dataIni)->where('data_inicio', '<', $dataFim)->where('data_fim', '>=', $dataFim)
                 ->orWhere('data_inicio', '<', $dataIni)->where('data_fim', '>=', $dataIni)->where('data_fim', '<', $dataFim)
                 ->orWhere('data_inicio', '<', $dataIni)->where('data_fim', '>=', $dataIni)->get();
+        
+
+            return $reunioes;
+        
 
         
 

@@ -15,6 +15,7 @@
     	Data de Inicio: {{$reuniao->data_inicio}}<br>
     	Data de Término: {{$reuniao->data_fim}}<br>
     	Facilitador: {{App\User::find($reuniao->user_id)->nome}}<br>
+        Tipo de Reunião: {{$reuniao->tipo}}<br>
     </div>
     <br><br>
 

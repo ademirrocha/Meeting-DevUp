@@ -33,12 +33,17 @@
             <div class="row">
                 <div class="col-sm-12 form-group">
 
-                    @if(session('error') || session('you_in_convocacao') || session('usuarios_em_outra_reuniao') || session('you_in_convite') || session('having_outras_reunioes') )
+                    @if(session('error') || session('you_in_convocacao') || session('usuarios_em_outra_reuniao') || session('you_in_convite') || session('having_outras_reunioes') || session('usuarios_deletados') )  
                         <div class="session-error col-sm-12" role="alert">
 
                             @if(session('error'))
                                 <strong>{{ session('error') }}</strong>
                             @endif
+                            
+                            @if(session('usuarios_deletados'))
+                                <strong>{{ session('usuarios_deletados') }}</strong>
+                            @endif
+                            
 
                             @if(session('you_in_convocacao'))
                                 <strong>{{ session('you_in_convocacao') }}</strong>
