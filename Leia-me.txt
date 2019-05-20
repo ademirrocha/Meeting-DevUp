@@ -100,6 +100,25 @@ Criar com os arquivos sqls dentro da pasta sqls
 2º Criar meeting-Dados
 
 
+-----------------------------------------------------------------------------------
+
+Para enviar email
+
+colocar o arquivo cacert.pem que está em certificados na pasta C:\xampp\apache\bin 
+e renomear para curl-ca-bundle.crt.
+
+no .env alterar essas configurações
+
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=email
+MAIL_PASSWORD=senha
+MAIL_ENCRYPTION=tls
+
+
+
+-----------------------------------------------------------------------------------
 
 e acessar pelo navegador normalmente 
 
@@ -108,7 +127,7 @@ e acessar pelo navegador normalmente
 
 Para acessar o usuario admin do sistema com os dados padrao
 
-email: admin@meeting.com
+email: meeting.dev.up@gmail.com
 senha:12345678
 
 

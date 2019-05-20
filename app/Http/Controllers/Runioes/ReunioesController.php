@@ -136,12 +136,12 @@ class ReunioesController extends Controller
                 ]);
             }
 
-            $reuniao_criada = Reunioes::find($order);
+            $reuniao_criada = Reunioes::with('local')->find($order);
 
             $pautas = Reunioes::pautas($order);
 
 
-             //auth()->user()->notify(new ReuniaoNotify($reuniao_criada, $pautas, auth()->user()->id));
+             auth()->user()->notify(new ReuniaoNotify($reuniao_criada, $pautas, auth()->user()->id));
 
 
 
@@ -200,7 +200,7 @@ class ReunioesController extends Controller
                             ]);
 
                         $u_r = User::find($participante);
-                        //$u_r->notify(new ReuniaoNotify($reuniao, $pautas, $value));
+                        $u_r->notify(new ReuniaoNotify($reuniao_criada, $pautas, $value));
 
                     }else if($request->tipo == 'Convocação' && ! $userConvidado){
                         $create = UsersReuniao::create([
@@ -212,7 +212,7 @@ class ReunioesController extends Controller
 
                             $u_r = User::find($participante);
                             
-                            //$u_r->notify(new ReuniaoNotify($reuniao, $pautas, $value));
+                            $u_r->notify(new ReuniaoNotify($reuniao_criada, $pautas, $value));
 
                     }else{
                         if( ! $userConvidadoGeral && ! $userConvidado ){
@@ -224,7 +224,7 @@ class ReunioesController extends Controller
 
                             $u_r = User::find($participante);
                             
-                            //$u_r->notify(new ReuniaoNotify($reuniao, $pautas, $value));
+                            $u_r->notify(new ReuniaoNotify($reuniao_criada, $pautas, $value));
                         }
                     }
 

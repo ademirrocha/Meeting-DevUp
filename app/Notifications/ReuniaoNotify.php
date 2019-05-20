@@ -62,12 +62,18 @@ class ReuniaoNotify extends Notification
             $property_info = $property_info . $property_nome . " || ";
         }
 
+
+        
         return (new MailMessage)
                     ->replyTo($notifiable->email, $notifiable->nome)
                     ->from('meeting.dev.up@gmail.com', 'Meeting')
                     ->subject("Nova Reunião: {$this->reuniao->title}")
+                    ->line("Tipo: {$this->reuniao->tipo}")
                     ->line("Pautas que serão discutidas:")
                     ->line(nl2br($property_info))
+                    ->line("Local: {$this->reuniao->local->nome}")
+                    ->line("Data de Inicio: {$this->reuniao->data_inicio}")
+                    ->line("Data de Encerramento: {$this->reuniao->data_fim}")
                     ->action('Confirmar Presença', url("reuniao/{$this->reuniao->id}/confirmar_presenca/{$this->usuario}/confirm"))
                     ->line('Obrigado por usar o Meeting');
                     

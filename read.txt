@@ -1,0 +1,37 @@
+--------------------------------------------------------
+Ambiente desenvolvimento
+
+## criar tabelas do banco de dados  ##
+php artisan migrate
+
+## inserir dados no banco de dados  ##
+php artisan db:seed
+
+## Executar Servidor ##
+php artisan serve
+
+## Configurar cache ##
+php artisan config:cache
+
+
+
+
+
+--------------------------------------------------------
+Ambiente Production
+
+## Otimizar para ambiente de proução ##
+composer install --optimize-autoloader --no-dev
+
+
+## Configurar cache ##
+php artisan config:cache
+
+
+## configurar rotas ##
+php artisan route:cache
+
+
+
+
+
