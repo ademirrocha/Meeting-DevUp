@@ -66,7 +66,7 @@ function newCargo($msg = '', rota){
     "<input type='hidden' name='_token' value='"+ token +"'>"+
     "<span style='color:red;'>"+
     $msg+ "</span><br> "+
-    "<input type='text' id='cargo' name='cargo' placeholder='Digite o Caro aqui'><br><br><br> <input type='submit' value='Salvar'>",
+    "<input type='text' id='cargo' name='cargo' placeholder='Digite o Cargo aqui'><br><br><br> <input type='submit' value='Salvar'>",
     
     
    confirmButtonText:

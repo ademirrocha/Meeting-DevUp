@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="col-sm-6 form-group">
-                    <label for="email">Email</label>
+                    <label for="email">E-mail</label>
 
                     <input type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" aria-describedby="emailHelp"  name="email" value="{{Auth::user()->email ?? old('email') }}" required autocomplete="email">
 

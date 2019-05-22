@@ -74,7 +74,7 @@
 
 
             <span class="center organizacao col-sm-12">
-                Organizacao: {{$organizacaoUser->fantasia}} 
+                Organização: {{$organizacaoUser->fantasia}} 
                  | Cargo: {{$cargoUser->cargo}}
 
                  

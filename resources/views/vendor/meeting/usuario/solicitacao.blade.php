@@ -48,7 +48,7 @@
             </div>
 
             <div class="col-sm-12 form-group">
-                <h6>Caso queira cadastrar sua empresa. Cique no botão abaixo</h6>
+                <h6>Caso queira cadastrar sua empresa. Clique no botão abaixo</h6>
             </div>
             <div class="col-sm-12 form-group">
                 <a class="btn  btn-info" href="{{ route('organizacao/cadastro')}}">Cadastrar Organização</a>

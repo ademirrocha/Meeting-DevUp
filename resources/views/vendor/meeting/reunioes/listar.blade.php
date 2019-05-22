@@ -10,7 +10,7 @@
     
         <h3>Lista de Reuniões</h3>
         <div class="col-sm-12 form-group ">
-            <a class="btn  btn-primary" href="{{route('reunioes/cadastrar')}}" >Nova Reuniao</a>
+            <a class="btn  btn-primary" href="{{route('reunioes/cadastrar')}}" >Nova Reunião</a>
         </div>
 
         <div class="container-fluid col-sm-12 form-group">
