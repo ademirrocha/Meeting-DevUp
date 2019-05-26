@@ -227,6 +227,7 @@ class OrganizacaoController extends Controller
         $usuarios = User::where('organizacao_id', auth()->user()->organizacao_id)
                         ->with('reunioes')
                         ->orderBy('qtd_participacao', 'asc')
+                        ->orderBy('nome', 'asc')
                         ->get();
 
                 

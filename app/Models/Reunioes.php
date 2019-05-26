@@ -77,7 +77,7 @@ class Reunioes extends Model
 
 
     public function hasParticipantes(){
-        return $this->belongsToMany(User::class, 'users_reuniao', 'reuniao_id', 'user_id' );
+        return $this->belongsToMany(User::class, 'users_reuniao', 'reuniao_id', 'user_id' )->orderBy('nome', 'ASC');
     }
 
 }
