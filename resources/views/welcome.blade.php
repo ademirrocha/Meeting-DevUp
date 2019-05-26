@@ -18,8 +18,19 @@
 
         <div class="box-text">
             <div class="conteudo-text">
-                <a href="{{ route('register') }}">Registrar</a>
-                <a href="{{ route('login') }}">Entrar</a>
+                @if (Route::has('login'))
+                <div class="top-right links">
+                    @auth
+                       <span style="color: #6931dc;">Bem Vindo {{auth()->user()->nome}}</span>  <a href="{{ url('/home') }}">Ir Para Home</a>
+                    @else
+                        <a href="{{ route('register') }}">Registrar</a>
+                        <a href="{{ route('login') }}">Entrar</a>
+
+                    @endauth
+                </div>
+            @endif
+                
+
                 <h1>Meeting</h1>
                 <p>" O Meeting é um software inovador que ajuda há organizar e planejar reuniões de sucesso. Garantimos resultado na produtividade, gerenciamos salas, pautas, atas e outras ferramentas de excelente qualidade"</p>
             </div>
