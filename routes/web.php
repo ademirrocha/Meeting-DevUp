@@ -10,8 +10,6 @@ Route::POST('permissions/{id}/editar', 'Config\ConfigController@editarPermissoes
 
 
 
-Route::get('/home', 'HomeController@index')->name('home');
-
 
 
 Route::group(['middleware', ['auth'], 'namespace' => 'Usuarios'], function(){
@@ -120,6 +118,12 @@ Route::POST('cadastrar-cargo', 'Controller@cadastrarCargo')->name('cadastrar-car
 
 Auth::routes();
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('/');
+
+
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+
+
+Route::get('/', 'HomeController@welcome')->name('/');
+
