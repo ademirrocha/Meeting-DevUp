@@ -16,12 +16,20 @@
             <img src="{{asset('vendor/meeting/img/reuniao.png')}}" alt="Imagem de Reunião">
         </div>
 
+
+                
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+
         <div class="box-text">
             <div class="conteudo-text">
                 @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                       <span style="color: #6931dc;">Bem Vindo {{auth()->user()->nome}}</span>  <a href="{{ url('/home') }}">Ir Para Home</a>
+                       <span style="color: #6931dc;">Bem Vindo {{auth()->user()->nome}}</span>  
+                       <a href="{{ url('/home') }}">Ir Para Home</a>
+                       <a class="aw-sair" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i> Sair</a>
                     @else
                         <a href="{{ route('register') }}">Registrar</a>
                         <a href="{{ route('login') }}">Entrar</a>
