@@ -31,6 +31,7 @@ return array(
     'App\\Models\\Cargo' => $baseDir . '/app/Models/Cargo.php',
     'App\\Models\\Localizacao' => $baseDir . '/app/Models/Localizacao.php',
     'App\\Models\\Organizacao' => $baseDir . '/app/Models/Organizacao.php',
+    'App\\Models\\Pautas' => $baseDir . '/app/Models/Pautas.php',
     'App\\Models\\Permissoes\\Permission' => $baseDir . '/app/Models/Permissoes/Permission.php',
     'App\\Models\\Permissoes\\Role' => $baseDir . '/app/Models/Permissoes/Role.php',
     'App\\Models\\Reunioes' => $baseDir . '/app/Models/Reunioes.php',

@@ -12,6 +12,7 @@ use App\Models\Permissoes\Permission;
 use App\Models\Permissoes\Role;
 use App\Models\Organizacao;
 use App\Models\Cargo;
+use App\Models\Reunioes;
 
 use App\Notifications\meetingNotify;
 
@@ -24,6 +25,13 @@ class User extends Authenticatable
     
 
     
+    //relacionamento entre users e reunioes
+    public function reunioes(){
+        return $this->belongsToMany(Reunioes::class, 'users_reuniao', 'user_id', 'reuniao_id');
+    }
+
+
+
 
     //relacionamento entre users e organizacao
     public function organizacao(){

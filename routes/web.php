@@ -31,8 +31,12 @@ Route::group(['middleware', ['auth'], 'namespace' => 'Usuarios'], function(){
 	Route::get('notificacoes/{id}/view', 'UsuariosController@showNotificacao')->name('notificacoes/{id}/view');
 
 
+	
 
 });
+
+//Rota Gerar Reltórios de Reunioes
+Route::get('reunioes/gerar-relatorios', 'Organizacoes\OrganizacaoController@gerarRelatorioReunioes')->name('reunioes/gerar-relatorios');
 
 
 Route::group(['middleware', ['auth'], 'namespace' => 'Organizacoes' , 'prefix' => 'organizacao' ], function(){
@@ -93,6 +97,10 @@ Route::group(['middleware', ['auth'], 'namespace' => 'Runioes' ], function(){
 
 
 	Route::get('reuniao/{id}/buscarAta', 'ReunioesController@buscaAutoAta')->name('reuniao/{id}/buscarAta');
+
+	
+
+	
 
 });
 

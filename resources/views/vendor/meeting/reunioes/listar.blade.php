@@ -7,11 +7,18 @@
             <a href="{{url('home')}}">Página Inicial</a>/
             <a href="{{url('reunioes')}}">Gerenciar Reuniões</a>
         @endsection
+
+        <div class="col-sm-4 form-group " style="position:relative; float: right;">
+            <a class="btn  btn-primary" href="{{route('reunioes/gerar-relatorios')}}" >
+                <i class="fas fa-file-pdf"></i> Gerar Relatório das Reuniões</a>
+        </div>
     
         <h3>Lista de Reuniões</h3>
         <div class="col-sm-12 form-group ">
             <a class="btn  btn-primary" href="{{route('reunioes/cadastrar')}}" >Nova Reunião</a>
         </div>
+
+        
 
         <div class="container-fluid col-sm-12 form-group">
             <div class="table-responsive">

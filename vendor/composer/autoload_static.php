@@ -394,6 +394,7 @@ class ComposerStaticInite12f14ca4ae7e64a8869bdf7697dc612
         'App\\Models\\Cargo' => __DIR__ . '/../..' . '/app/Models/Cargo.php',
         'App\\Models\\Localizacao' => __DIR__ . '/../..' . '/app/Models/Localizacao.php',
         'App\\Models\\Organizacao' => __DIR__ . '/../..' . '/app/Models/Organizacao.php',
+        'App\\Models\\Pautas' => __DIR__ . '/../..' . '/app/Models/Pautas.php',
         'App\\Models\\Permissoes\\Permission' => __DIR__ . '/../..' . '/app/Models/Permissoes/Permission.php',
         'App\\Models\\Permissoes\\Role' => __DIR__ . '/../..' . '/app/Models/Permissoes/Role.php',
         'App\\Models\\Reunioes' => __DIR__ . '/../..' . '/app/Models/Reunioes.php',

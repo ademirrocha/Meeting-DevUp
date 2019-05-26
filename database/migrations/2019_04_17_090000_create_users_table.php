@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->bigInteger('organizacao_id')->unsigned()->default(1);
             $table->boolean('organizacao_confirmed')->default(0);
             $table->bigInteger('cargo_id')->unsigned()->default(1);
+            $table->integer('qtd_participacao')->default(0);
             $table->string('nome', 50);
             $table->string('email', 50)->unique();
             $table->string('cpf', 16)->nullable();

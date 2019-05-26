@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\Organizacao;
+use App\Models\UsersReuniao;
 
 use Gate;
 
@@ -194,6 +195,45 @@ class OrganizacaoController extends Controller
         return redirect()->back();
 
     }
+
+
+
+    public function gerarRelatorioReunioes(){
+
+        $organizacao = Organizacao::find(auth()->user()->organizacao_id);
+        
+        foreach ($organizacao->users as $user) {
+            
+            $qtd = 0;
+
+            foreach ($user->reunioes as $reuniao) {
+
+                
+                if(UsersReuniao::where('user_id', $user->id)
+                        ->where('reuniao_id', $reuniao->id)
+                        ->where('presente', 1)
+                        ->exists() || $reuniao->user_id == $user->id){
+                    $qtd++;
+                }
+
+            }
+
+             $user->qtd_participacao = $qtd;
+
+
+             $user->save();
+        }
+
+        $usuarios = User::where('organizacao_id', auth()->user()->organizacao_id)
+                        ->with('reunioes')
+                        ->orderBy('qtd_participacao', 'asc')
+                        ->get();
+
+                
+
+        return view( 'vendor.meeting.reunioes.relatorio', compact('usuarios'));
+    }
+
 
 
 

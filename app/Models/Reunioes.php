@@ -36,7 +36,7 @@ class Reunioes extends Model
 
     //relacionamento facilitdor
     public function facilitador(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
 
@@ -51,6 +51,12 @@ class Reunioes extends Model
        return $pautas;
     }
 
+
+    public function hasPautas(){
+        return $this->hasMany(Pautas::class, 'reuniao_id');
+    }
+
+
    
     public function reunioes(){
         return $this->belongsTo(Organizacao::class);
@@ -63,6 +69,15 @@ class Reunioes extends Model
 
     public function participantes(){
         return $this->hasMany(UsersReuniao::class, 'reuniao_id');
+    }
+
+    public function participantesPresentes($id){
+        return (UsersReuniao::where('id', $id)->where('presente', 1)->get());
+    }
+
+
+    public function hasParticipantes(){
+        return $this->belongsToMany(User::class, 'users_reuniao', 'reuniao_id', 'user_id' );
     }
 
 }

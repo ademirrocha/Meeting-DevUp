@@ -258,6 +258,10 @@ CREATE TABLE `meeting_notifies` (
 -- Indexes for dumped tables
 --
 
+ALTER TABLE `users`
+  ADD COLUMN `qtd_participacao` INT NULL DEFAULT '0' AFTER `updated_at`;
+
+
 --
 -- Indexes for table `cargos`
 --
