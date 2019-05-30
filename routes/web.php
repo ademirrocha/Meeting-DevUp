@@ -74,6 +74,13 @@ Route::group(['middleware', ['auth'], 'namespace' => 'Runioes' ], function(){
 	Route::get('reunioes', 'ReunioesController@showReunioes')->name('reunioes');
 
 	Route::get('reunioes/cadastrar', 'ReunioesController@showCadastroReuniao')->name('reunioes/cadastrar');
+
+
+	Route::get('reunioes/buscarNextReunioes', 'ReunioesController@buscarNextReunioes')->name('reunioes/buscarNextReunioes');
+
+
+
+
 	Route::POST('reunioes/cadastro', 'ReunioesController@cadastrarReuniao')->name('reunioes/cadastro');
 	
 	Route::POST('reuniao/adicionar-pessoas', 'ReunioesController@adicionarPessoasNaReuniao')->name('reuniao/adicionar-pessoas');

@@ -10,7 +10,7 @@
         
     <form>
         <input id="token_page" type="hidden" name="_token" value="{{csrf_token()}}">
-        <h3>Listagem Organização</h3>
+        <h3>Lista Organização</h3>
         
 
         <div class="container-fluid col-sm-12 form-group">

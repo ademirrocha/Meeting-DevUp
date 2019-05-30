@@ -220,7 +220,6 @@ class OrganizacaoController extends Controller
 
              $user->qtd_participacao = $qtd;
 
-
              $user->save();
         }
 
@@ -230,12 +229,8 @@ class OrganizacaoController extends Controller
                         ->orderBy('nome', 'asc')
                         ->get();
 
-                
-
         return view( 'vendor.meeting.reunioes.relatorio', compact('usuarios'));
     }
-
-
 
 
 }

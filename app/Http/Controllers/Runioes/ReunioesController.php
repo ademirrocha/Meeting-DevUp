@@ -36,10 +36,25 @@ class ReunioesController extends Controller
 
         $funcionarios = User::where('organizacao_id', auth()->user()->organizacao_id)->get();
 
-        
 
         return view('vendor.meeting.reunioes.cadastro', compact('localizacoes', 'funcionarios'));
     }
+
+
+    public function buscarNextReunioes(){
+
+        $reunioes = Reunioes::where('organizacao_id', auth()->user()->organizacao_id)
+                ->where('data_inicio', '>=', date('Y-m-d H:i:s'))->get();
+
+        if($reunioes->count() == 0){
+            return 'sem reunioes futuras';
+        }
+
+
+        return response()->json($reunioes);
+
+    }
+
 
     public function cadastrarReuniao(Request $request){
 

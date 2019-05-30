@@ -82,7 +82,7 @@
             <div class="row">
                 <div class="col-sm-6 form-group">
                     <label for="pauta"  class="control-label">Título da Reunião</label>
-                    <input id="pauta" name="title" type="text" class="form-control" value="{{$reuniao->title ?? old('title')}}" required autocomplete="title" autofocus placeholder="Digite o Título da Reunião" />
+                    <input id="pauta" name="title" type="text" class="form-control" value="{{$reuniao->title ?? old('title')}}" required autocomplete="title" autofocus placeholder="Digite o Título da Reunião" onblur="atualizaListaFuncionarios();" />
                 </div>
 
                 <div class="col-sm-6 form-group">
@@ -297,6 +297,13 @@
             </div>
         </form>
 
+
+
+@endsection
+
+@section('js')
+
+    <script  src="{{asset('vendor/meeting/javascripts/script-reunioes.js')}}"></script>
 
 
 @endsection
